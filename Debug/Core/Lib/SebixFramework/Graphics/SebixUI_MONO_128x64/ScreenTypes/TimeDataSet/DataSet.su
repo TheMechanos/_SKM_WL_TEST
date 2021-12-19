@@ -1,0 +1,15 @@
+SebixUI_MONO_128x64.hpp:144:15:virtual void UIElementGeneric::backFromAbove(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:146:15:virtual void UIElementGeneric::timeIterate(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:147:15:virtual void UIElementGeneric::onTimeout(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:148:15:virtual void UIElementGeneric::onMinuteChangeIterate(ContextManager*)	0	static
+DataSet.cpp:62:6:virtual void UIParameterData::exiting(ContextManager*)	0	static
+DataSet.hpp:24:7:UIParameterData::~UIParameterData()	0	static
+DataSet.cpp:27:6:virtual void UIParameterData::initialize(ContextManager*)	16	static
+DataSet.cpp:41:6:virtual void UIParameterData::iterate(ContextManager*)	24	static
+DataSet.cpp:66:6:virtual void UIParameterData::paint(ContextManager*)	48	static
+DataSet.cpp:100:6:virtual void UIParameterData::onExitKeyPressed(ContextManager*)	8	static
+DataSet.cpp:108:6:virtual void UIParameterData::onOKKeyPressed(ContextManager*)	16	static
+DataSet.cpp:122:6:virtual void UIParameterData::onEncoderChange(ContextManager*)	8	static
+DataSet.hpp:24:7:virtual UIParameterData::~UIParameterData()	8	static
+DataSet.cpp:10:1:UIParameterData::UIParameterData(const char*, const char*, DATE*, uint32_t)	16	static
+DataSet.cpp:22:7:DATE* UIParameterData::getDate()	0	static

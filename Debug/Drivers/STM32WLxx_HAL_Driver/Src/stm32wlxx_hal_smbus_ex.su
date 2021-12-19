@@ -1,2 +1,2 @@
-stm32wlxx_hal_smbus_ex.c:95:6:HAL_SMBUSEx_EnableFastModePlus	16	static
-stm32wlxx_hal_smbus_ex.c:119:6:HAL_SMBUSEx_DisableFastModePlus	16	static
+stm32wlxx_hal_smbus_ex.c:95:6:HAL_SMBUSEx_EnableFastModePlus	0	static
+stm32wlxx_hal_smbus_ex.c:119:6:HAL_SMBUSEx_DisableFastModePlus	0	static

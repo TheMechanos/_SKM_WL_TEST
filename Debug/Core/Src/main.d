@@ -1,4 +1,4 @@
-Core/Src/main.o: ../Core/Src/main.cpp ../Core/Src/HAL/main.h \
+Core/Src/main.o: ../Core/Src/main.cpp ../Core/Src/App.hpp \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h \
  ../Core/Src/HAL/stm32wlxx_hal_conf.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h \
@@ -69,9 +69,26 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Src/HAL/main.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_usart.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_usart_ex.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_wwdg.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h \
+ ../Core/Src/SKWL.hpp \
+ ../Core/Lib/SebixFramework/BasicTypes/Key/Button.hpp \
+ ../Core/Lib/SebixFramework/BasicTypes/IO/Input.hpp \
+ ../Core/Lib/STM32WL_SebixFramework/Peripheral/GPIO/IO_Pin.hpp \
+ ../Core/Lib/SebixFramework/Generic/GenericIO.hpp \
+ ../Core/Lib/STM32WL_SebixFramework/Peripheral/GPIO/PIN.hpp \
+ ../Core/Lib/SebixFramework/BasicTypes/IO/Output.hpp \
+ ../Core/Src/System.hpp ../Core/Lib/SebixFramework/Music/MusicPlayer.hpp \
+ ../Core/Lib/SebixFramework/Music/notesAndSong.hpp \
+ ../Core/Lib/STM32WL_SebixFramework/Peripheral/Timers/PWM/TimerPWM.hpp \
+ ../Core/Lib/SebixFramework/BasicTypes/Key/ButtonClick.hpp \
+ ../Core/Lib/STM32WL_SebixFramework/Interfaces/SubGhz/SubGhz.hpp \
+ ../Core/Lib/SebixFramework/Radio/Modules/RadioRFSwitch.hpp \
+ ../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126xController.hpp \
+ ../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126x.hpp \
+ ../Core/Lib/SebixFramework/Radio/Modules/SX126x/Config/SXExampleConfig.hpp \
+ ../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126x.hpp
 
-../Core/Src/HAL/main.h:
+../Core/Src/App.hpp:
 
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h:
 
@@ -214,3 +231,39 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Src/HAL/main.h \
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_wwdg.h:
 
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:
+
+../Core/Src/SKWL.hpp:
+
+../Core/Lib/SebixFramework/BasicTypes/Key/Button.hpp:
+
+../Core/Lib/SebixFramework/BasicTypes/IO/Input.hpp:
+
+../Core/Lib/STM32WL_SebixFramework/Peripheral/GPIO/IO_Pin.hpp:
+
+../Core/Lib/SebixFramework/Generic/GenericIO.hpp:
+
+../Core/Lib/STM32WL_SebixFramework/Peripheral/GPIO/PIN.hpp:
+
+../Core/Lib/SebixFramework/BasicTypes/IO/Output.hpp:
+
+../Core/Src/System.hpp:
+
+../Core/Lib/SebixFramework/Music/MusicPlayer.hpp:
+
+../Core/Lib/SebixFramework/Music/notesAndSong.hpp:
+
+../Core/Lib/STM32WL_SebixFramework/Peripheral/Timers/PWM/TimerPWM.hpp:
+
+../Core/Lib/SebixFramework/BasicTypes/Key/ButtonClick.hpp:
+
+../Core/Lib/STM32WL_SebixFramework/Interfaces/SubGhz/SubGhz.hpp:
+
+../Core/Lib/SebixFramework/Radio/Modules/RadioRFSwitch.hpp:
+
+../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126xController.hpp:
+
+../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126x.hpp:
+
+../Core/Lib/SebixFramework/Radio/Modules/SX126x/Config/SXExampleConfig.hpp:
+
+../Core/Lib/SebixFramework/Radio/Modules/SX126x/SX126x.hpp:

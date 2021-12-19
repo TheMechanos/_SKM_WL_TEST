@@ -1,0 +1,10 @@
+Encoder.cpp:14:1:ENCODER::ENCODER(ENCODER_BASE*)	0	static
+Encoder.cpp:35:6:void ENCODER::init()	8	static
+Encoder.cpp:40:6:void ENCODER::registerBuzzer(OUTPUT_ADVENCED*, uint16_t)	0	static
+Encoder.cpp:46:6:void ENCODER::iterate()	16	static
+Encoder.cpp:69:9:int32_t ENCODER::getValue()	8	static
+Encoder.cpp:77:6:void ENCODER::setLimits(int32_t, int32_t)	0	static
+Encoder.cpp:88:6:void ENCODER::setValue(int32_t)	0	static
+Encoder.cpp:93:6:void ENCODER::setLooping(bool)	0	static
+Encoder.cpp:98:6:void ENCODER::setDivider(uint32_t)	8	static
+Encoder.cpp:104:6:void ENCODER::setMultipler(int32_t)	0	static

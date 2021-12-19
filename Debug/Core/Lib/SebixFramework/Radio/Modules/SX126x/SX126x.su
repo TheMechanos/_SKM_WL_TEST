@@ -1,0 +1,60 @@
+SX126x.hpp:302:15:virtual void SX126x::irqTxCpltCallback()	0	static
+SX126x.hpp:303:15:virtual void SX126x::irqRxCpltCallback()	0	static
+SX126x.hpp:304:15:virtual void SX126x::irqPreambleDetectedCallback()	0	static
+SX126x.hpp:305:15:virtual void SX126x::irqSyncWordValidCallback()	0	static
+SX126x.hpp:306:15:virtual void SX126x::irqHeaderValidCallback()	0	static
+SX126x.hpp:307:15:virtual void SX126x::irqHeaderErrorCallback()	0	static
+SX126x.hpp:308:15:virtual void SX126x::irqCRCErrorCallback()	0	static
+SX126x.hpp:309:15:virtual void SX126x::irqCADStatusCallback()	0	static
+SX126x.hpp:310:15:virtual void SX126x::irqRxTxTimeoutCallback()	0	static
+SX126x.cpp:11:1:SX126x::SX126x(SubGhz*, RadioRFSwitch*)	4	static
+SX126x.cpp:16:6:void SX126x::init()	0	static
+SX126x.cpp:141:16:SX126x::Status SX126x::decodeStatus(uint8_t)	0	static
+SX126x.cpp:520:19:HAL_StatusTypeDef SX126x::radioExecSetCmd(SX126x::Comm, uint8_t*, uint16_t)	8	static
+SX126x.cpp:75:6:void SX126x::setModeSleep(SX126x::SleepConfig)	24	static
+SX126x.cpp:88:6:void SX126x::setModeSTDBY(SX126x::STDBY)	16	static
+SX126x.cpp:95:6:void SX126x::setModeFS()	8	static
+SX126x.cpp:99:6:void SX126x::setModeTx(uint32_t)	16	static
+SX126x.cpp:109:6:void SX126x::setModeRx(uint32_t)	16	static
+SX126x.cpp:117:6:void SX126x::setModeRxCont()	16	static
+SX126x.cpp:155:6:void SX126x::writeCalibrateImage(uint32_t)	16	static
+SX126x.cpp:223:6:void SX126x::writeLoRaSymbolNumberTimeout(uint8_t)	16	static
+SX126x.cpp:228:6:void SX126x::writeFrequency(uint32_t)	24	static
+SX126x.cpp:277:6:void SX126x::writeBufferBaseAddress(uint8_t, uint8_t)	16	static
+SX126x.cpp:287:6:void SX126x::writePacketType(SX126x::PacketType)	16	static
+SX126x.cpp:294:6:void SX126x::writeModParams(SX126x::ModParams)	16	static
+SX126x.cpp:395:6:void SX126x::writeRegulatorMode(SX126x::RegulatorMode)	16	static
+SX126x.cpp:401:6:void SX126x::writeIrq(uint16_t, uint16_t, uint16_t, uint16_t)	24	static
+SX126x.cpp:416:6:void SX126x::clearDeviceErrors()	16	static
+SX126x.cpp:421:6:void SX126x::clearIrqStatus(uint16_t)	16	static
+SX126x.cpp:526:19:HAL_StatusTypeDef SX126x::radioExecGetCmd(SX126x::Comm, uint8_t*, uint16_t)	8	static
+SX126x.cpp:132:16:SX126x::Status SX126x::readStatus()	24	static
+SX126x.cpp:29:16:SX126x::Status SX126x::getStatus()	8	static
+SX126x.cpp:456:23:SX126x::RxBufferState SX126x::readRxBufferStatus()	24	static
+SX126x.cpp:20:23:SX126x::RxBufferState SX126x::getRxBufferStatus()	16	static
+SX126x.cpp:467:22:SX126x::PacketStatus SX126x::readPacketStatus()	16	static
+SX126x.cpp:23:22:SX126x::PacketStatus SX126x::getPacketStatus()	8	static
+SX126x.cpp:488:8:int8_t SX126x::readRssiInst()	16	static
+SX126x.cpp:26:8:int8_t SX126x::getRssiInst()	8	static
+SX126x.cpp:532:19:HAL_StatusTypeDef SX126x::radioWriteBuffer(uint8_t, uint8_t*, uint16_t)	8	static
+SX126x.cpp:34:6:void SX126x::writeBuffer(uint8_t, uint8_t*, size_t)	8	static
+SX126x.cpp:538:19:HAL_StatusTypeDef SX126x::radioReadBuffer(uint8_t, uint8_t*, uint16_t)	8	static
+SX126x.cpp:38:6:void SX126x::readBuffer(uint8_t, uint8_t*, size_t)	8	static
+SX126x.cpp:544:19:HAL_StatusTypeDef SX126x::radioWriteRegisters(SX126x::Reg, uint8_t*, uint16_t)	8	static
+SX126x.cpp:178:6:void SX126x::writeSyncWords(uint8_t*, size_t)	24	static
+SX126x.cpp:186:6:void SX126x::writeCRCSeed(uint16_t)	16	static
+SX126x.cpp:195:6:void SX126x::writeCRCPolynomial(uint16_t)	16	static
+SX126x.cpp:550:19:HAL_StatusTypeDef SX126x::radioReadRegisters(SX126x::Reg, uint8_t*, uint16_t)	8	static
+SX126x.cpp:556:19:HAL_StatusTypeDef SX126x::radioWriteRegister(SX126x::Reg, uint8_t)	8	static
+SX126x.cpp:215:6:void SX126x::writeAddressNode(uint8_t)	8	static
+SX126x.cpp:219:6:void SX126x::writeBroadcastNode(uint8_t)	8	static
+SX126x.cpp:242:6:void SX126x::writeTxParams(SX126x::TxParams)	32	static
+SX126x.cpp:502:6:void SX126x::writeRxGain(bool)	8	static
+SX126x.cpp:561:19:HAL_StatusTypeDef SX126x::radioReadRegister(SX126x::Reg, uint8_t*)	8	static
+SX126x.cpp:204:6:void SX126x::writeWhiteningSeed(uint16_t)	24	static
+SX126x.cpp:331:6:void SX126x::writePacketParams(SX126x::PacketParams)	24	static
+SX126x.cpp:390:6:void SX126x::writePacketSize(uint8_t)	88	static
+SX126x.cpp:42:6:void SX126x::setPacketSize(uint8_t)	8	static
+SX126x.cpp:429:10:uint32_t SX126x::readRandom()	24	static
+SX126x.cpp:495:6:void SX126x::writeTxClampEnable()	16	static
+SX126x.cpp:49:6:void SX126x::config(SX126xConfig*)	88	static

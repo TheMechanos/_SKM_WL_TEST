@@ -1,0 +1,4 @@
+Debug/*
+CMSIS/
+!Debug/*.bin
+*.chm

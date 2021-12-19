@@ -1,0 +1,27 @@
+RTCTypes.cpp:10:1:TIME::TIME(uint8_t, uint8_t, uint8_t)	4	static
+RTCTypes.cpp:16:6:void TIME::setTime(uint8_t, uint8_t, uint8_t)	0	static
+RTCTypes.cpp:22:6:void TIME::setSecond(uint8_t)	0	static
+RTCTypes.cpp:25:6:void TIME::setMinute(uint8_t)	0	static
+RTCTypes.cpp:28:6:void TIME::setHour(uint8_t)	0	static
+RTCTypes.cpp:32:9:uint8_t TIME::getSecond()	0	static
+RTCTypes.cpp:35:9:uint8_t TIME::getMinute()	0	static
+RTCTypes.cpp:38:9:uint8_t TIME::getHour()	0	static
+RTCTypes.cpp:45:6:void TIME::getString(char*, TIME::COMPONENTS)	24	static
+RTCTypes.cpp:42:6:void TIME::getString(char*)	8	static
+RTCTypes.cpp:77:1:DATE::DATE(uint8_t, uint8_t, uint16_t)	4	static
+RTCTypes.cpp:83:6:void DATE::setDate(uint8_t, uint8_t, uint16_t)	0	static
+RTCTypes.cpp:89:6:void DATE::setDay(uint8_t)	0	static
+RTCTypes.cpp:92:6:void DATE::setMonth(uint8_t)	0	static
+RTCTypes.cpp:95:6:void DATE::setYear(uint16_t)	0	static
+RTCTypes.cpp:99:9:uint8_t DATE::getDay()	0	static
+RTCTypes.cpp:102:9:uint8_t DATE::getMonth()	0	static
+RTCTypes.cpp:105:10:uint16_t DATE::getYear()	0	static
+RTCTypes.cpp:109:6:void DATE::getString(char*)	16	static
+RTCTypes.cpp:116:6:bool DATE::isLeapYear(uint16_t)	0	static
+RTCTypes.cpp:113:6:bool DATE::isLeapYear()	8	static
+RTCTypes.cpp:126:15:static DATE::WEEKDAY DATE::getWeekday(uint8_t, uint8_t, uint16_t)	4	static
+RTCTypes.cpp:123:15:DATE::WEEKDAY DATE::getWeekday()	8	static
+RTCTypes.cpp:132:7:char* DATE::getWeekdayString()	8	static
+RTCTypes.cpp:135:7:char* DATE::getWeekdayString(DATE::WEEKDAY)	0	static
+RTCTypes.cpp:140:1:DATETIME::DATETIME(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t)	24	static
+RTCTypes.cpp:145:6:void DATETIME::getString(char*)	32	static

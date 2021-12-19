@@ -1,0 +1,10 @@
+TimerTimeBase.cpp:12:1:TimerTimeBase::TimerTimeBase(TIM_TypeDef*, uint16_t, uint16_t, TimerTimeBase::CounterMode, TimerTimeBase::ClockDivision, TimerTimeBase::AutoReloadPreload)	4	static
+TimerTimeBase.cpp:25:6:void TimerTimeBase::configIRQn(IRQn_Type, uint8_t, TimerTimeBaseListener*)	0	static
+TimerTimeBase.cpp:31:6:void TimerTimeBase::init()	8	static
+TimerTimeBase.cpp:39:6:void TimerTimeBase::start()	8	static
+TimerTimeBase.cpp:43:6:void TimerTimeBase::stop()	8	static
+TimerTimeBase.cpp:48:20:TIM_HandleTypeDef* TimerTimeBase::getHandler()	0	static
+TimerTimeBase.cpp:52:6:void TimerTimeBase::setPrescaler(uint16_t)	0	static
+TimerTimeBase.cpp:61:6:void TimerTimeBase::setPeroid(uint16_t)	8	static
+TimerTimeBase.cpp:71:6:void TimerTimeBase::IRQHandler()	8	static
+TimerTimeBase.cpp:75:6:void TimerTimeBase::periodElapsed()	8	static

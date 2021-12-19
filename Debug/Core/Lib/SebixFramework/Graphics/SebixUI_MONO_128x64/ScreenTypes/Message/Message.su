@@ -1,0 +1,18 @@
+SebixUI_MONO_128x64.hpp:144:15:virtual void UIElementGeneric::backFromAbove(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:146:15:virtual void UIElementGeneric::timeIterate(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:147:15:virtual void UIElementGeneric::onTimeout(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:148:15:virtual void UIElementGeneric::onMinuteChangeIterate(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:151:15:virtual void UIElementGeneric::onEncoderChange(ContextManager*)	0	static
+Message.cpp:73:6:virtual void UIMessage::onExitKeyPressed(ContextManager*)	0	static
+Message.hpp:23:7:UIMessage::~UIMessage()	0	static
+Message.cpp:39:6:virtual void UIMessage::initialize(ContextManager*)	8	static
+Message.cpp:44:6:virtual void UIMessage::iterate(ContextManager*)	16	static
+Message.cpp:56:6:virtual void UIMessage::exiting(ContextManager*)	8	static
+Message.hpp:23:7:virtual UIMessage::~UIMessage()	8	static
+Message.cpp:10:1:UIMessage::UIMessage(const char*, const char*, uint16_t, bool, OUTPUT_ADVENCED::SEQUENCE*, bool)	16	static
+Message.cpp:22:7:char* UIMessage::getDescription()	0	static
+Message.cpp:61:6:virtual void UIMessage::paint(ContextManager*)	32	static
+Message.cpp:26:10:uint16_t UIMessage::getTime()	0	static
+Message.cpp:30:6:bool UIMessage::is_skipable()	0	static
+Message.cpp:77:6:virtual void UIMessage::onOKKeyPressed(ContextManager*)	16	static
+Message.cpp:34:6:void UIMessage::setImage(tImage)	16	static

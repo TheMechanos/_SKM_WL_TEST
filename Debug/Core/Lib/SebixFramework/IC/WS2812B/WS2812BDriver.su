@@ -1,0 +1,21 @@
+SPI.hpp:19:15:virtual void SPI_EventListener::onGlobalInterrupt()	0	static
+SPI.hpp:22:15:virtual void SPI_EventListener::onDMARxHalfCmplt()	0	static
+SPI.hpp:23:15:virtual void SPI_EventListener::onDMARxCmplt()	0	static
+WS2812BDriver.hpp:16:7:WS2812BDriver::~WS2812BDriver()	0	static
+WS2812BDriver.hpp:16:7:virtual WS2812BDriver::~WS2812BDriver()	8	static
+WS2812BDriver.cpp:10:1:WS2812BDriver::WS2812BDriver()	0	static
+WS2812BDriver.cpp:13:1:WS2812BDriver::WS2812BDriver(SPI*)	0	static
+WS2812BDriver.cpp:41:6:void WS2812BDriver::cls()	4	static
+WS2812BDriver.cpp:50:6:void WS2812BDriver::ref()	8	static
+WS2812BDriver.cpp:23:6:void WS2812BDriver::init(WS2812BDriver::WSLED*, uint16_t)	32	static
+WS2812BDriver.cpp:67:6:void WS2812BDriver::configSlopes(uint8_t, uint8_t)	0	static
+WS2812BDriver.cpp:105:6:void WS2812BDriver::WSLEDtoBytes(uint16_t, uint8_t*)	12	static
+WS2812BDriver.cpp:72:6:virtual void WS2812BDriver::onDMATxHalfCmplt()	8	static
+WS2812BDriver.cpp:92:6:virtual void WS2812BDriver::onDMATxCmplt()	8	static
+WS2812BDriver.cpp:133:6:void WS2812BDriver::setLed(uint16_t, WS2812BDriver::WSLED)	16	static
+WS2812BDriver.cpp:139:6:void WS2812BDriver::setLed(uint16_t, uint8_t, uint8_t, uint8_t)	4	static
+WS2812BDriver.cpp:146:6:void WS2812BDriver::setWhite(uint16_t, uint8_t)	0	static
+WS2812BDriver.cpp:153:6:void WS2812BDriver::setLedR(uint16_t, uint8_t)	0	static
+WS2812BDriver.cpp:159:6:void WS2812BDriver::setLedG(uint16_t, uint8_t)	0	static
+WS2812BDriver.cpp:165:6:void WS2812BDriver::setLedB(uint16_t, uint8_t)	0	static
+WS2812BDriver.cpp:171:23:WS2812BDriver::WSLED* WS2812BDriver::getLedPointer(uint16_t)	0	static

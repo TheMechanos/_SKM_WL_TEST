@@ -1,0 +1,15 @@
+SebixUI_MONO_128x64.hpp:144:15:virtual void UIElementGeneric::backFromAbove(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:146:15:virtual void UIElementGeneric::timeIterate(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:147:15:virtual void UIElementGeneric::onTimeout(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:148:15:virtual void UIElementGeneric::onMinuteChangeIterate(ContextManager*)	0	static
+ParameterNumerical.hpp:38:15:virtual void UIParameterNumerical::exiting(ContextManager*)	0	static
+ParameterNumerical.cpp:50:6:virtual void UIParameterNumerical::iterate(ContextManager*)	0	static
+ParameterNumerical.hpp:27:7:UIParameterNumerical::~UIParameterNumerical()	0	static
+ParameterNumerical.cpp:37:6:virtual void UIParameterNumerical::initialize(ContextManager*)	32	static
+ParameterNumerical.cpp:54:6:virtual void UIParameterNumerical::paint(ContextManager*)	72	static
+ParameterNumerical.cpp:72:6:virtual void UIParameterNumerical::onExitKeyPressed(ContextManager*)	8	static
+ParameterNumerical.cpp:76:6:virtual void UIParameterNumerical::onOKKeyPressed(ContextManager*)	32	static
+ParameterNumerical.cpp:85:6:virtual void UIParameterNumerical::onEncoderChange(ContextManager*)	8	static
+ParameterNumerical.hpp:27:7:virtual UIParameterNumerical::~UIParameterNumerical()	8	static
+ParameterNumerical.cpp:10:1:UIParameterNumerical::UIParameterNumerical()	8	static
+ParameterNumerical.cpp:21:1:UIParameterNumerical::UIParameterNumerical(const char*, const char*, ParameterNumerical*, int32_t, const char*, uint32_t)	16	static

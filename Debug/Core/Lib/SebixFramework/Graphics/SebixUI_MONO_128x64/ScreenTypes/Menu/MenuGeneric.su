@@ -1,0 +1,20 @@
+SebixUI_MONO_128x64.hpp:144:15:virtual void UIElementGeneric::backFromAbove(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:146:15:virtual void UIElementGeneric::timeIterate(ContextManager*)	0	static
+SebixUI_MONO_128x64.hpp:147:15:virtual void UIElementGeneric::onTimeout(ContextManager*)	0	static
+MenuGeneric.hpp:53:16:virtual char* UIMenuGeneric::getPositionName(uint8_t)	0	static
+MenuGeneric.hpp:54:16:virtual bool UIMenuGeneric::isPositionEnabled(uint8_t)	0	static
+MenuGeneric.hpp:56:16:virtual bool UIMenuGeneric::isPositionCheckbox(uint8_t)	0	static
+MenuGeneric.hpp:57:16:virtual bool UIMenuGeneric::isPositionCheckboxChecked(uint8_t)	0	static
+MenuGeneric.hpp:59:16:virtual bool UIMenuGeneric::isPositionText(uint8_t)	0	static
+MenuGeneric.hpp:60:16:virtual bool UIMenuGeneric::isPositionLineUp(uint8_t)	0	static
+MenuGeneric.hpp:61:16:virtual bool UIMenuGeneric::isPositionLineDown(uint8_t)	0	static
+MenuGeneric.cpp:29:6:virtual void UIMenuGeneric::exiting(ContextManager*)	0	static
+MenuGeneric.cpp:37:6:virtual void UIMenuGeneric::iterate(ContextManager*)	0	static
+MenuGeneric.cpp:41:6:virtual void UIMenuGeneric::onMinuteChangeIterate(ContextManager*)	0	static
+MenuGeneric.cpp:49:6:virtual void UIMenuGeneric::onOKKeyPressed(ContextManager*)	8	static
+MenuGeneric.cpp:21:6:virtual void UIMenuGeneric::initialize(ContextManager*)	16	static
+MenuGeneric.cpp:45:6:virtual void UIMenuGeneric::onExitKeyPressed(ContextManager*)	8	static
+MenuGeneric.cpp:57:6:virtual void UIMenuGeneric::onEncoderChange(ContextManager*)	8	static
+MenuGeneric.cpp:62:6:virtual void UIMenuGeneric::paint(ContextManager*)	64	static
+MenuGeneric.cpp:10:1:UIMenuGeneric::UIMenuGeneric(const char*, uint32_t)	8	static
+MenuGeneric.cpp:33:6:void UIMenuGeneric::registerListener(UIMenuListener*)	0	static

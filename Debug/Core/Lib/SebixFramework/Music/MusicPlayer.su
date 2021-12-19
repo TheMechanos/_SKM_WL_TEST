@@ -1,0 +1,10 @@
+MusicPlayer.cpp:14:1:MusicPlayer::MusicPlayer(TimerPWMChannel*, uint32_t)	8	static
+MusicPlayer.cpp:32:6:void MusicPlayer::init()	8	static
+MusicPlayer.cpp:55:6:void MusicPlayer::stop()	8	static
+MusicPlayer.cpp:45:6:void MusicPlayer::playRepeat(Song*, uint8_t)	16	static
+MusicPlayer.cpp:40:6:void MusicPlayer::play(Song*, uint16_t)	8	static
+MusicPlayer.cpp:62:6:void MusicPlayer::playTone(NOTE, uint16_t)	16	static
+MusicPlayer.cpp:69:6:bool MusicPlayer::isPlaying()	0	static
+MusicPlayer.cpp:73:6:NOTE MusicPlayer::getActualNote()	24	static
+MusicPlayer.cpp:118:6:void MusicPlayer::setFreq(uint16_t)	16	static
+MusicPlayer.cpp:80:6:void MusicPlayer::iterate(uint32_t)	24	static

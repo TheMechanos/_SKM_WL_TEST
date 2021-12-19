@@ -1,0 +1,9 @@
+ParameterLogical.hpp:37:7:PARAMETER_LOGICAL_EEPROM::~PARAMETER_LOGICAL_EEPROM()	0	static
+ParameterLogical.hpp:37:7:virtual PARAMETER_LOGICAL_EEPROM::~PARAMETER_LOGICAL_EEPROM()	8	static
+ParameterLogical.cpp:12:1:PARAMETER_LOGICAL_EEPROM::PARAMETER_LOGICAL_EEPROM()	0	static
+ParameterLogical.cpp:18:1:PARAMETER_LOGICAL_EEPROM::PARAMETER_LOGICAL_EEPROM(bool, EEPROM_GENERIC*, uint16_t)	8	static
+ParameterLogical.cpp:26:6:void PARAMETER_LOGICAL_EEPROM::save()	16	static
+ParameterLogical.cpp:34:6:void PARAMETER_LOGICAL_EEPROM::load()	24	static
+ParameterLogical.cpp:50:6:void PARAMETER_LOGICAL_EEPROM::setAndSave(bool)	8	static
+ParameterLogical.cpp:55:6:bool PARAMETER_LOGICAL_EEPROM::getAndLoad()	8	static
+ParameterLogical.cpp:60:6:bool PARAMETER_LOGICAL_EEPROM::get()	8	static

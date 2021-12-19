@@ -1,0 +1,10 @@
+KeyEncoder.cpp:36:10:virtual uint32_t KeyEncoder::getRawValue()	0	static
+KeyEncoder.cpp:40:6:virtual void KeyEncoder::setRawValue(uint32_t)	0	static
+KeyEncoder.cpp:44:10:virtual uint16_t KeyEncoder::getPeroid()	0	static
+KeyEncoder.cpp:48:6:virtual void KeyEncoder::setDivider(uint16_t)	8	static
+KeyEncoder.hpp:14:7:KeyEncoder::~KeyEncoder()	0	static
+KeyEncoder.hpp:14:7:virtual KeyEncoder::~KeyEncoder()	8	static
+KeyEncoder.cpp:13:1:KeyEncoder::KeyEncoder(BUTTON_CLICK*, BUTTON_CLICK*)	4	static
+KeyEncoder.cpp:22:6:void KeyEncoder::configFader(uint32_t, uint32_t, uint32_t, uint32_t)	32	static
+KeyEncoder.cpp:18:6:virtual void KeyEncoder::init()	16	static
+KeyEncoder.cpp:27:6:void KeyEncoder::iterate(uint32_t)	8	static
