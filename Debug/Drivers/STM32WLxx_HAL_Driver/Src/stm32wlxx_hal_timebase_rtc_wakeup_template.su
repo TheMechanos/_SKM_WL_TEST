@@ -1,7 +1,0 @@
-stm32wlxx_ll_rcc.h:2332:22:LL_RCC_EnableRTC	4	static
-stm32wlxx_ll_bus.h:914:22:LL_APB1_GRP1_EnableClock	24	static
-stm32wlxx_hal_timebase_rtc_wakeup_template.c:108:19:HAL_InitTick	152	static
-stm32wlxx_hal_timebase_rtc_wakeup_template.c:254:6:HAL_SuspendTick	4	static
-stm32wlxx_hal_timebase_rtc_wakeup_template.c:269:6:HAL_ResumeTick	4	static
-stm32wlxx_hal_timebase_rtc_wakeup_template.c:287:6:HAL_RTCEx_WakeUpTimerEventCallback	16	static
-stm32wlxx_hal_timebase_rtc_wakeup_template.c:300:6:RTC_WKUP_IRQHandler	8	static

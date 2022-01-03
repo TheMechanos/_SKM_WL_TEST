@@ -1,3 +1,0 @@
-LithiumBattery.cpp:16:1:LithiumBattery::LithiumBattery(ANALOG_INPUT*, ANALOG_INPUT*)	0	static
-LithiumBattery.cpp:21:9:uint8_t LithiumBattery::getPercent()	8	static
-LithiumBattery.cpp:36:10:uint16_t LithiumBattery::getTemperature()	0	static

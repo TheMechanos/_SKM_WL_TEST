@@ -1,7 +1,0 @@
-stm32wlxx_ll_rcc.h:2332:22:LL_RCC_EnableRTC	4	static
-stm32wlxx_ll_bus.h:914:22:LL_APB1_GRP1_EnableClock	24	static
-stm32wlxx_hal_timebase_rtc_alarm_template.c:113:19:HAL_InitTick	216	static
-stm32wlxx_hal_timebase_rtc_alarm_template.c:307:6:HAL_SuspendTick	4	static
-stm32wlxx_hal_timebase_rtc_alarm_template.c:322:6:HAL_ResumeTick	4	static
-stm32wlxx_hal_timebase_rtc_alarm_template.c:340:6:HAL_RTC_AlarmAEventCallback	16	static
-stm32wlxx_hal_timebase_rtc_alarm_template.c:352:6:RTC_Alarm_IRQHandler	8	static

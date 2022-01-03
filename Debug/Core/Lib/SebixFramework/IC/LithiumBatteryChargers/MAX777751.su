@@ -1,8 +1,0 @@
-ImpulseInput.hpp:14:7:ImpulseInput::~ImpulseInput()	0	static
-ImpulseInput.hpp:14:7:virtual ImpulseInput::~ImpulseInput()	8	static
-MAX777751.cpp:13:1:MAX777751::MAX777751(PIN*, PIN*, PIN*, PIN*)	120	static
-MAX777751.cpp:24:6:void MAX777751::init()	8	static
-MAX777751.cpp:32:6:void MAX777751::iterate(uint32_t)	24	static
-MAX777751.cpp:74:18:MAX777751::State MAX777751::getState()	0	static
-MAX777751.cpp:78:6:void MAX777751::setOTGState(bool)	8	static
-MAX777751.cpp:86:6:void MAX777751::setCharging(bool)	8	static

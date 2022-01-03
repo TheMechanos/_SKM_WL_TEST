@@ -1,5 +1,0 @@
-System.cpp:14:6:static void SYSTEM::SystemErrorHandler()	0	static
-System.cpp:22:10:static uint32_t SYSTEM::getTick()	8	static
-System.cpp:27:6:static void SYSTEM::setLoopsInTenMs(uint16_t)	0	static
-System.cpp:32:10:static uint16_t SYSTEM::getLoopsInTenMs()	0	static
-System.cpp:38:9:static int32_t SYSTEM::map(int32_t, int32_t, int32_t, int32_t, int32_t)	4	static
