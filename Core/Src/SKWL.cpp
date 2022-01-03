@@ -90,7 +90,7 @@ void SKWL::iterateCritical(){
 }
 
 void SKWL::iterateNonCritical(){
-	uint32_t TICK = SYSTEM::getTick();
+	uint32_t TICK = System::getTick();
 	led[0].iterate(TICK);
 	led[1].iterate(TICK);
 	led[2].iterate(TICK);
@@ -122,7 +122,7 @@ void SKWL::SystemClock_Config(void) {
 	RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
 	RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		SYSTEM::SystemErrorHandler();
+		System::SystemErrorHandler();
 	}
 	/** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
 	 */
@@ -135,7 +135,7 @@ void SKWL::SystemClock_Config(void) {
 	RCC_ClkInitStruct.AHBCLK3Divider = RCC_SYSCLK_DIV1;
 
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		SYSTEM::SystemErrorHandler();
+		System::SystemErrorHandler();
 	}
 }
 

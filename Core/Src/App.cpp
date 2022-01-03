@@ -25,11 +25,11 @@ void App::run(){
 		loopsInTenMs++;
 		loop();
 
-		if(lastLoopTick < SYSTEM::getTick()-10){
+		if(lastLoopTick < System::getTick()-10){
 			loop10ms();
-			SYSTEM::setLoopsInTenMs(loopsInTenMs);
+			System::setLoopsInTenMs(loopsInTenMs);
 			loopsInTenMs=0;
-			lastLoopTick = SYSTEM::getTick();
+			lastLoopTick = System::getTick();
 		}
 	}
 

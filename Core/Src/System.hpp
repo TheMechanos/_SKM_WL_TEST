@@ -11,7 +11,7 @@
 #include <stm32wlxx.h>
 
 
-class SYSTEM{
+class System{
 public:
 
 	static void SystemErrorHandler();

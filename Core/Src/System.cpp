@@ -7,11 +7,11 @@
 
 #include "System.hpp"
 
-uint16_t SYSTEM::loopsInTenMs;
+uint16_t System::loopsInTenMs;
 
 
 
-void SYSTEM::SystemErrorHandler(){
+void System::SystemErrorHandler(){
 	while(1){
 
 
@@ -19,22 +19,22 @@ void SYSTEM::SystemErrorHandler(){
 }
 
 
-uint32_t SYSTEM::getTick(){
+uint32_t System::getTick(){
 	return HAL_GetTick();
 }
 
 
-void SYSTEM::setLoopsInTenMs(uint16_t s){
+void System::setLoopsInTenMs(uint16_t s){
 	loopsInTenMs=s;
 }
 
 
-uint16_t SYSTEM::getLoopsInTenMs(){
+uint16_t System::getLoopsInTenMs(){
 	return loopsInTenMs;
 }
 
 
 
-int32_t SYSTEM::map(int32_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t out_max) {
+int32_t System::map(int32_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
