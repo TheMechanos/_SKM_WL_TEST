@@ -42,7 +42,7 @@ void App::init(){
 
 
 void App::loop(){
-
+/*
 	uint8_t buf[10];
 	if(dev->button[0].isPressed()){
 		dev->led[2].ON();
@@ -65,8 +65,8 @@ void App::loop(){
 
 	}
 
+*/
 
-	/*
 	if(uint8_t q = dev->button[0].isMultiClick()){
 		uint8_t buf[1];
 		buf[0] = q;
@@ -85,7 +85,7 @@ void App::loop(){
 		dev->led[2].OFF();
 
 	}
-*/
+
 
 
 }
