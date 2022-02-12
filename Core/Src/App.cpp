@@ -38,6 +38,7 @@ void App::run(){
 
 void App::init(){
 	dev->init();
+	//POPRAWKI GRAFICZNE
 }
 
 
