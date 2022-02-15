@@ -10,6 +10,7 @@
 
 #include <stm32wlxx.h>
 
+#define SKM_PACKET_QUEUE_SIZE 8
 
 class System{
 public:
@@ -23,6 +24,7 @@ public:
 	static uint16_t getLoopsInTenMs();
 
 	static int32_t map(int32_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t out_max);
+
 
 
 private:

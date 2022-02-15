@@ -38,49 +38,40 @@ void App::run(){
 
 void App::init(){
 	dev->init();
+
+	dev->led[0].ON();
 }
 
 
 void App::loop(){
-/*
-	uint8_t buf[10];
-	if(dev->button[0].isPressed()){
-		dev->led[2].ON();
-		while(1){
-			HAL_Delay(500);
-			dev->led[0].toggle();
-			dev->sx.transmit(buf, 1, 100);
-
-		}
-
-	}
-	if(dev->button[1].isPressed()){
-		dev->led[2].ON();
-		while(1){
-			if(dev->sx.receive(buffer, 1, 1000)){
-				dev->led[0].toggle();
-			}
-
-		}
-
-	}
-
-*/
 
 	if(uint8_t q = dev->button[0].isMultiClick()){
-		uint8_t buf[1];
-		buf[0] = q;
-		dev->sx.transmit(buf, 1, 100);
-		dev->led[2].timeON(300);
 
+		SKMPacket pac;
+		pac.init(2);
+		pac.dataIdx[0] = q;
+
+		pac.header.address.source = 10;
+		pac.header.address.destiny = 10;
+		pac.header.address.sender=10;
+		pac.header.packet.hops=10;
+		pac.header.packet.cryptoKey=10;
+		pac.header.packet.type=10;
+		pac.header.packet.id=10;
+		pac.header.device.type=10;
+		pac.header.device.info=10;
+
+		dev->sx.transmitPacket(&pac, 100);
+
+		dev->led[2].timeON(300);
 	}
 
-	uint8_t buffer[10];
 	if(dev->button[1].isPressed()){
 		dev->led[2].ON();
-		uint8_t q=dev->sx.receive(buffer, 1, 5000);
-		if(q==1){
-			dev->led[0].blinkNumber(buffer[0], 500);
+		SKMPacket pac;
+		uint8_t q = dev->sx.receivePacket(&pac, 5000);
+		if(q){
+			dev->led[0].blinkNumber(pac.dataIdx[0], 500);
 		}
 		dev->led[2].OFF();
 
