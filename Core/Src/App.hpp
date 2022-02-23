@@ -13,6 +13,8 @@
 #include <SKWL.hpp>
 #include <System.hpp>
 
+#include <Radio/SKM/Packet.hpp>
+
 class App{
 public:
 	App();

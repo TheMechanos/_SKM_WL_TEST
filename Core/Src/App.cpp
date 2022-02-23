@@ -41,43 +41,53 @@ void App::init(){
 
 	dev->led[0].ON();
 
+
+	SKMPacket pack[3];
+
+	pack[0].header.packet.id = 1;
+	pack[0].setDataSize(1);
+
+	pack[1].header.packet.id = 2;
+	pack[1].setDataSize(2);
+
+	pack[2].header.packet.id = 3;
+	pack[2].setDataSize(3);
+
+	dev->radio.send(&pack[0]);
+	dev->radio.send(&pack[1]);
+	dev->radio.send(&pack[2]);
+
 }
 
+//kontrola id pakietu przy dodawaniu
 
 void App::loop(){
 
 	if(uint8_t q = dev->button[0].isMultiClick()){
 
+		static uint16_t idr=0;
 		SKMPacket pac;
-		pac.init(2);
-		pac.dataIdx[0] = q;
+		pac.header.packet.id = idr++;
+		pac.setDataSize(q);
 
-		pac.header.address.source = 10;
-		pac.header.address.destiny = 10;
-		pac.header.address.sender=10;
-		pac.header.packet.hops=10;
-		pac.header.packet.cryptoKey=10;
-		pac.header.packet.type=10;
-		pac.header.packet.id=10;
-		pac.header.device.type=10;
-		pac.header.device.info=10;
-
-		dev->sx.transmitPacket(&pac, 100);
+		dev->radio.send(&pac);
 
 		dev->led[2].timeON(300);
 	}
 
-	if(dev->button[1].isPressed()){
-		dev->led[2].ON();
-		SKMPacket pac;
-		uint8_t q = dev->sx.receivePacket(&pac, 5000);
-		if(q){
-			dev->led[0].blinkNumber(pac.dataIdx[0], 500);
+
+
+	//dev->sx.iterate();
+
+	if(dev->button[2].isMultiClick(2)){ //Send PacketStatusQueue
+		System::log("Packet status Queue (size=%d):", dev->radio.packetStatus.size());
+
+		for (uint8_t q = 0; q < dev->radio.packetStatus.size(); q++){
+			SKMPacketStatus* s = &dev->radio.packetStatus[q];
+			System::log("ID: %d, status: %d, txTime: %d",s->id,s->status,s->sendedTime);
 		}
-		dev->led[2].OFF();
 
 	}
-
 
 
 }

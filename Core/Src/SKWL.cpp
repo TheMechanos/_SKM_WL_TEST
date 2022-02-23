@@ -8,6 +8,17 @@
 #include <SKWL.hpp>
 
 
+extern "C" void send_char(char c)
+{
+	SKWL::getInstance()->logBuffor.push(c);
+}
+extern "C" int __io_putchar(int ch)
+{
+	send_char(ch);
+	return ch;
+}
+
+
 
 SKWL SKWL::INSTANCE;
 SKWL* SKWL::getInstance(){
@@ -41,7 +52,9 @@ SKWL::SKWL(){
 
 	rfSw = RadioRFSwitch(&rfSwTx, &rfSwRx);
 
-	sx = SX126xController(&subghz, &rfSw);
+	sxRadio = SKMRadioSX126X(&subghz, &rfSw);
+
+	radio = SKMController(&sxRadio);
 
 }
 
@@ -79,8 +92,60 @@ void SKWL::init(){
 	__HAL_RCC_SUBGHZ_CLK_ENABLE();
 	subghz.init();
 
-	sx.init();
-	sx.config(&sxExampleGFSK);
+	sxRadio.init();
+	sxRadio.config(&sxExampleGFSK);
+
+	radio.init();
+
+
+	initUart();
+
+
+}
+
+void SKWL::initUart(){
+
+	GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = { 0 };
+
+	PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LPUART1;
+	PeriphClkInitStruct.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_PCLK1;
+	if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+
+	__HAL_RCC_LPUART1_CLK_ENABLE();
+
+	GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_2;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Alternate = GPIO_AF8_LPUART1;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	hlpuart1.Instance = LPUART1;
+	hlpuart1.Init.BaudRate = 115200;
+	hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
+	hlpuart1.Init.StopBits = UART_STOPBITS_1;
+	hlpuart1.Init.Parity = UART_PARITY_NONE;
+	hlpuart1.Init.Mode = UART_MODE_TX_RX;
+	hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+	hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+	hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+	hlpuart1.FifoMode = UART_FIFOMODE_DISABLE;
+	if(HAL_UART_Init(&hlpuart1) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+	if(HAL_UARTEx_SetTxFifoThreshold(&hlpuart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+	if(HAL_UARTEx_SetRxFifoThreshold(&hlpuart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+	if(HAL_UARTEx_DisableFifoMode(&hlpuart1) != HAL_OK){
+		System::SystemErrorHandler();
+	}
 
 }
 
@@ -98,6 +163,22 @@ void SKWL::iterateNonCritical(){
 	button[0].iterate(TICK);
 	button[1].iterate(TICK);
 	button[2].iterate(TICK);
+
+	radio.iterate();
+
+	size_t siz = logBuffor.size();
+	if(siz > 0){
+		char buffer[siz];
+
+		for (size_t q = 0; q < siz; q++){
+			buffer[q] = logBuffor.front();
+			logBuffor.pop();
+		}
+
+		HAL_UART_Transmit(&SKWL::getInstance()->hlpuart1, (uint8_t*) buffer, siz, 1000);
+	}
+
+
 }
 
 void SKWL::SystemClock_Config(void) {
@@ -151,31 +232,31 @@ extern "C" void HAL_SYSTICK_Callback(void){
 
 //RADIO INTERRUPTS
 extern "C" void HAL_SUBGHZ_TxCpltCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqTxCpltCallback();
+	SKWL::getInstance()->sxRadio.irqTxCpltCallback();
 }
 extern "C" void HAL_SUBGHZ_RxCpltCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqRxCpltCallback();
+	SKWL::getInstance()->sxRadio.irqRxCpltCallback();
 }
 extern "C" void HAL_SUBGHZ_PreambleDetectedCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqPreambleDetectedCallback();
+	SKWL::getInstance()->sxRadio.irqPreambleDetectedCallback();
 }
 extern "C" void HAL_SUBGHZ_SyncWordValidCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqSyncWordValidCallback();
+	SKWL::getInstance()->sxRadio.irqSyncWordValidCallback();
 }
 extern "C" void HAL_SUBGHZ_HeaderValidCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqHeaderValidCallback();
+	SKWL::getInstance()->sxRadio.irqHeaderValidCallback();
 }
 extern "C" void HAL_SUBGHZ_HeaderErrorCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqHeaderErrorCallback();
+	SKWL::getInstance()->sxRadio.irqHeaderErrorCallback();
 }
 extern "C" void HAL_SUBGHZ_CRCErrorCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqCRCErrorCallback();
+	SKWL::getInstance()->sxRadio.irqCRCErrorCallback();
 }
 extern "C" void HAL_SUBGHZ_CADStatusCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL_SUBGHZ_CadStatusTypeDef cadstatus){
-	SKWL::getInstance()->sx.irqCADStatusCallback();
+	SKWL::getInstance()->sxRadio.irqCADStatusCallback();
 }
 extern "C" void HAL_SUBGHZ_RxTxTimeoutCallback(SUBGHZ_HandleTypeDef *hsubghz){
-	SKWL::getInstance()->sx.irqRxTxTimeoutCallback();
+	SKWL::getInstance()->sxRadio.irqRxTxTimeoutCallback();
 }
 
 

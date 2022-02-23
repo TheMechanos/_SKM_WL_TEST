@@ -25,11 +25,12 @@
 
 #include <Interfaces/SubGhz/SubGhz.hpp>
 #include <Radio/Modules/RadioRFSwitch.hpp>
-#include <Radio/Modules/SX126x/SX126xController.hpp>
 #include <Radio/Modules/SX126x/Config/SXExampleConfig.hpp>
+#include <Radio/Modules/SX126x/SKMRadioSX126X.hpp>
+#include <Radio/SKM/Controllers/SKMController.hpp>
 
 
-
+#include <Software/CircuralContainers/CircularQueue.h>
 
 
 
@@ -43,11 +44,16 @@ public:
 	void iterateCritical();
 	void iterateNonCritical();
 
+	CircularQueue<char, 2048> logBuffor;
+
 	static SKWL* getInstance();
 
 public:
 	static SKWL INSTANCE;
 	void SystemClock_Config();
+
+	void initUart();
+	UART_HandleTypeDef hlpuart1;
 
 	PIN pinLed[3];
 	PIN pinSw[3];
@@ -64,7 +70,12 @@ public:
 	SubGhz subghz;
 	RadioRFSwitch rfSw;
 
-	SX126xController sx;
+	SKMRadioSX126X sxRadio;
+
+	SKMController radio;
+
+
+
 
 };
 
