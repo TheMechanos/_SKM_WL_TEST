@@ -56,6 +56,8 @@ SKWL::SKWL(){
 
 	radio = SKMController(&sxRadio);
 
+	radioInterface = SKM_SX126x_STM32_HAL_Interface(SKM_SX126x_STM32_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
+
 }
 
 void SKWL::init(){

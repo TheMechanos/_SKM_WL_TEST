@@ -26,9 +26,9 @@
 #include <Interfaces/SubGhz/SubGhz.hpp>
 #include <Modules/RadioRFSwitch.hpp>
 #include <Modules/SX126x/Config/SXExampleConfig.hpp>
+#include <Modules/SX126x/Interfaces/HAL_STM32.hpp>
 #include <Modules/SX126x/SKMRadioSX126X.hpp>
 #include <SKM/Controllers/SKMController.hpp>
-
 
 #include <Software/CircuralContainers/CircularQueue.h>
 
@@ -73,6 +73,8 @@ public:
 	SKMRadioSX126X sxRadio;
 
 	SKMController radio;
+
+	SKM_SX126x_STM32_HAL_Interface radioInterface;
 
 
 
