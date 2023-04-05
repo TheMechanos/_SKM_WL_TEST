@@ -7,8 +7,8 @@
 
 #include "SKMRadioSX126X.hpp"
 
-SKMRadioSX126X::SKMRadioSX126X(SubGhz *subGhz, RadioRFSwitch *rfsw) :
-		SX126x(subGhz, rfsw){
+SKMRadioSX126X::SKMRadioSX126X(SKM_SX126x_Interface* interface) :
+		SX126x(interface){
 
 	txTimeout = 100;
 
@@ -161,7 +161,6 @@ void SKMRadioSX126X::transmit(uint8_t *buffer, uint8_t size, uint32_t timeout) {
 	setPacketSize(size);
 	writeBuffer(0, buffer, size);
 
-	rfsw->set(RadioRFSwitch::Mode::Tx);
 	setModeTx(timeout*1000);
 
 }
@@ -174,7 +173,6 @@ uint8_t SKMRadioSX126X::receive(uint8_t *buffer, uint8_t size, uint32_t timeout)
 		setConfigPacketSize();
 	}
 
-	rfsw->set(RadioRFSwitch::Mode::Rx);
 	setModeRx(timeout*1000);
 
 	uint32_t endTick = System::getTick() + timeout;

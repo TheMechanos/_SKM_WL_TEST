@@ -52,11 +52,13 @@ SKWL::SKWL(){
 
 	rfSw = RadioRFSwitch(&rfSwTx, &rfSwRx);
 
-	sxRadio = SKMRadioSX126X(&subghz, &rfSw);
+	radioInterface = SKM_SX126x_STM32_HAL_Interface(SKM_SX126x_STM32_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
+
+	sxRadio = SKMRadioSX126X(&radioInterface);
 
 	radio = SKMController(&sxRadio);
 
-	radioInterface = SKM_SX126x_STM32_HAL_Interface(SKM_SX126x_STM32_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
+
 
 }
 

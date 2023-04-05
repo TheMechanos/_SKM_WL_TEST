@@ -23,7 +23,7 @@ public:
 	};*/
 
 	SKMRadioSX126X()=default;
-	SKMRadioSX126X(SubGhz* subGhz, RadioRFSwitch* rfsw);
+	SKMRadioSX126X(SKM_SX126x_Interface* interface);
 
 	void configTxTimeout(uint16_t msTxTimeout);
 

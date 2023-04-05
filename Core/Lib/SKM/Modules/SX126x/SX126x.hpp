@@ -10,8 +10,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "../RadioRFSwitch.hpp"
-#include <Interfaces/SubGhz/SubGhz.hpp>
+
+#include "Interfaces/SKM_SX126x_Interface.hpp"
 
 class SX126xConfig;
 
@@ -292,7 +292,7 @@ public:
 
 
 	SX126x() = default;
-	SX126x(SubGhz* subGhz, RadioRFSwitch* rfsw);
+	SX126x(SKM_SX126x_Interface* interface);
 
 	void init();
 
@@ -331,14 +331,13 @@ protected:
 	void readBuffer(uint8_t offset, uint8_t *data, size_t size);
 
 	SX126xConfig* conf;
-	RadioRFSwitch* rfsw;
 	PacketType packetType;
 
 	uint32_t readRandom();
 
-
+	SKM_SX126x_Interface* interface;
 private:
-	SubGhz* subGhz;
+
 
 	void writePacketType(PacketType newPacketType);
 	void writeModParams(ModParams newModParams);
@@ -379,16 +378,16 @@ private:
 
 
 
-	HAL_StatusTypeDef radioExecSetCmd(Comm command, uint8_t *pBuffer, uint16_t Size);
-	HAL_StatusTypeDef radioExecGetCmd(Comm command, uint8_t *pBuffer, uint16_t Size);
+	bool radioExecSetCmd(Comm command, uint8_t *pBuffer, uint16_t Size);
+	bool radioExecGetCmd(Comm command, uint8_t *pBuffer, uint16_t Size);
 
-	HAL_StatusTypeDef radioWriteBuffer(uint8_t Offset, uint8_t *pBuffer, uint16_t Size);
-	HAL_StatusTypeDef radioReadBuffer(uint8_t Offset, uint8_t *pBuffer, uint16_t Size);
+	bool radioWriteBuffer(uint8_t Offset, uint8_t *pBuffer, uint16_t Size);
+	bool radioReadBuffer(uint8_t Offset, uint8_t *pBuffer, uint16_t Size);
 
-	HAL_StatusTypeDef radioWriteRegisters(Reg Address, uint8_t *pBuffer, uint16_t Size);
-	HAL_StatusTypeDef radioReadRegisters(Reg Address, uint8_t *pBuffer, uint16_t Size);
-	HAL_StatusTypeDef radioWriteRegister(Reg Address, uint8_t Value);
-	HAL_StatusTypeDef radioReadRegister(Reg Address, uint8_t *pValue);
+	bool radioWriteRegisters(Reg Address, uint8_t *pBuffer, uint16_t Size);
+	bool radioReadRegisters(Reg Address, uint8_t *pBuffer, uint16_t Size);
+	bool radioWriteRegister(Reg Address, uint8_t Value);
+	bool radioReadRegister(Reg Address, uint8_t *pValue);
 };
 
 

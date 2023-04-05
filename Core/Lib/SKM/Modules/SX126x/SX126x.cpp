@@ -8,9 +8,8 @@
 #include "SX126x.hpp"
 
 
-SX126x::SX126x(SubGhz* subGhz, RadioRFSwitch* rfsw){
-	this->subGhz = subGhz;
-	this->rfsw = rfsw;
+SX126x::SX126x(SKM_SX126x_Interface* interface){
+	this->interface = interface;
 }
 
 void SX126x::init() {
@@ -97,6 +96,9 @@ void SX126x::setModeFS(){
 }
 
 void SX126x::setModeTx(uint32_t usTimeout){
+
+	interface->switchTx();
+
 	usTimeout /= 15;
 	uint8_t buf[3];
 	buf[0] = (usTimeout>>16)&0xFF;
@@ -107,6 +109,9 @@ void SX126x::setModeTx(uint32_t usTimeout){
 }
 
 void SX126x::setModeRx(uint32_t usTimeout){
+
+	interface->switchRx();
+
 	usTimeout /= 15;
 	uint8_t buf[3];
 	buf[0] = (usTimeout>>16)&0xFF;
@@ -115,6 +120,9 @@ void SX126x::setModeRx(uint32_t usTimeout){
 	radioExecSetCmd(Comm::setRx, buf, 3);
 }
 void SX126x::setModeRxCont(){
+
+	interface->switchRx();
+
 	uint8_t buf[3];
 	buf[0] = 0xFF;
 	buf[1] = 0xFF;
@@ -123,6 +131,7 @@ void SX126x::setModeRxCont(){
 }
 
 void SX126x::setModeTxContinousWave(){
+	interface->switchTx();
 	radioExecSetCmd(Comm::setTxContinuousWave, 0, 0);
 }
 
@@ -527,50 +536,50 @@ void SX126x::writeRxGain(bool state) {
 
 
 
-HAL_StatusTypeDef SX126x::radioExecSetCmd(Comm command, uint8_t *pBuffer,
+bool SX126x::radioExecSetCmd(Comm command, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->execSetCmd((uint8_t) command, pBuffer, Size);
+	return interface->execSetCmd((uint8_t) command, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioExecGetCmd(Comm command, uint8_t *pBuffer,
+bool SX126x::radioExecGetCmd(Comm command, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->execGetCmd((uint8_t) command, pBuffer, Size);
+	return interface->execGetCmd((uint8_t) command, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioWriteBuffer(uint8_t Offset, uint8_t *pBuffer,
+bool SX126x::radioWriteBuffer(uint8_t Offset, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->writeBuffer(Offset, pBuffer, Size);
+	return interface->writeBuffer(Offset, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioReadBuffer(uint8_t Offset, uint8_t *pBuffer,
+bool SX126x::radioReadBuffer(uint8_t Offset, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->readBuffer(Offset, pBuffer, Size);
+	return interface->readBuffer(Offset, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioWriteRegisters(Reg Address, uint8_t *pBuffer,
+bool SX126x::radioWriteRegisters(Reg Address, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->writeRegisters((uint8_t)Address, pBuffer, Size);
+	return interface->writeRegisters((uint8_t)Address, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioReadRegisters(Reg Address, uint8_t *pBuffer,
+bool SX126x::radioReadRegisters(Reg Address, uint8_t *pBuffer,
 		uint16_t Size) {
 
-	return subGhz->readRegisters((uint8_t)Address, pBuffer, Size);
+	return interface->readRegisters((uint8_t)Address, pBuffer, Size);
 }
 
-HAL_StatusTypeDef SX126x::radioWriteRegister(Reg Address, uint8_t Value) {
+bool SX126x::radioWriteRegister(Reg Address, uint8_t Value) {
 
-	return subGhz->writeRegister((uint8_t)Address, Value);
+	return interface->writeRegister((uint8_t)Address, Value);
 }
 
-HAL_StatusTypeDef SX126x::radioReadRegister(Reg Address, uint8_t *pValue) {
+bool SX126x::radioReadRegister(Reg Address, uint8_t *pValue) {
 
-	return subGhz->readRegister((uint8_t)Address, pValue);
+	return interface->readRegister((uint8_t)Address, pValue);
 }
 
 
