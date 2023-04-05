@@ -7,18 +7,13 @@
 
 #include <SKWL.hpp>
 
-
-extern "C" void send_char(char c)
-{
+extern "C" void send_char(char c){
 	SKWL::getInstance()->logBuffor.push(c);
 }
-extern "C" int __io_putchar(int ch)
-{
+extern "C" int __io_putchar(int ch){
 	send_char(ch);
 	return ch;
 }
-
-
 
 SKWL SKWL::INSTANCE;
 SKWL* SKWL::getInstance(){
@@ -37,8 +32,6 @@ SKWL::SKWL(){
 	pinRfSwTx = PIN(GPIOA, GPIO_PIN_5);
 	pinRfSwRx = PIN(GPIOA, GPIO_PIN_4);
 
-
-
 	led[0] = OUTPUT_ADVENCED(&pinLed[0]);
 	led[1] = OUTPUT_ADVENCED(&pinLed[1]);
 	led[2] = OUTPUT_ADVENCED(&pinLed[2]);
@@ -47,12 +40,9 @@ SKWL::SKWL(){
 	button[1] = BUTTON_CLICK(&pinSw[1], 30);
 	button[2] = BUTTON_CLICK(&pinSw[2], 30);
 
-	rfSwTx = OUTPUT_PIN(&pinRfSwTx);
-	rfSwRx = OUTPUT_PIN(&pinRfSwRx);
+	radioInterface = RadioInterface(RadioInterface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
 
-	rfSw = RadioRFSwitch(&rfSwTx, &rfSwRx);
-
-	sxRadio = SKMRadioSX126X(&subghz, &rfSw);
+	sxRadio = SKMRadioSX126X(&radioInterface, &sxExampleGFSK); //TODO
 
 	radio = SKMController(&sxRadio);
 
@@ -73,12 +63,6 @@ void SKWL::init(){
 	//CONFIG INTERRUPT GROUPING - 4 bits for preemption priority,  0 bits for subpriority
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-	//Inicjalizacja switcha radiowego
-	rfSwTx.init();
-	rfSwRx.init();
-	rfSw.init();
-
-
 	led[0].init();
 	led[1].init();
 	led[2].init();
@@ -88,18 +72,12 @@ void SKWL::init(){
 	button[2].init();
 
 
-	//Inicjalizacja Radia
-	__HAL_RCC_SUBGHZ_CLK_ENABLE();
-	subghz.init();
 
+	radioInterface.init();
 	sxRadio.init();
-	sxRadio.config(&sxExampleGFSK);
-
 	radio.init();
 
-
 	initUart();
-
 
 }
 
@@ -151,7 +129,6 @@ void SKWL::initUart(){
 
 void SKWL::iterateCritical(){
 
-
 }
 
 void SKWL::iterateNonCritical(){
@@ -178,10 +155,9 @@ void SKWL::iterateNonCritical(){
 		HAL_UART_Transmit(&SKWL::getInstance()->hlpuart1, (uint8_t*) buffer, siz, 1000);
 	}
 
-
 }
 
-void SKWL::SystemClock_Config(void) {
+void SKWL::SystemClock_Config(void){
 	SystemCoreClock = 48000000;
 
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
@@ -202,7 +178,7 @@ void SKWL::SystemClock_Config(void) {
 	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
 	RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
 	RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+	if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK){
 		System::SystemErrorHandler();
 	}
 	/** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
@@ -215,12 +191,10 @@ void SKWL::SystemClock_Config(void) {
 	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 	RCC_ClkInitStruct.AHBCLK3Divider = RCC_SYSCLK_DIV1;
 
-	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+	if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK){
 		System::SystemErrorHandler();
 	}
 }
-
-
 
 //INTERRUPT SECTION ***********************************************************************************************************************
 
@@ -229,39 +203,34 @@ extern "C" void HAL_SYSTICK_Callback(void){
 	SKWL::getInstance()->iterateCritical();
 }
 
-
 //RADIO INTERRUPTS
-extern "C" void HAL_SUBGHZ_TxCpltCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_TxCpltCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqTxCpltCallback();
 }
-extern "C" void HAL_SUBGHZ_RxCpltCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_RxCpltCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqRxCpltCallback();
 }
-extern "C" void HAL_SUBGHZ_PreambleDetectedCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_PreambleDetectedCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqPreambleDetectedCallback();
 }
-extern "C" void HAL_SUBGHZ_SyncWordValidCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_SyncWordValidCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqSyncWordValidCallback();
 }
-extern "C" void HAL_SUBGHZ_HeaderValidCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_HeaderValidCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqHeaderValidCallback();
 }
-extern "C" void HAL_SUBGHZ_HeaderErrorCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_HeaderErrorCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqHeaderErrorCallback();
 }
-extern "C" void HAL_SUBGHZ_CRCErrorCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_CRCErrorCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqCRCErrorCallback();
 }
-extern "C" void HAL_SUBGHZ_CADStatusCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL_SUBGHZ_CadStatusTypeDef cadstatus){
+extern "C" void HAL_SUBGHZ_CADStatusCallback(SUBGHZ_HandleTypeDef* hsubghz, HAL_SUBGHZ_CadStatusTypeDef cadstatus){
 	SKWL::getInstance()->sxRadio.irqCADStatusCallback();
 }
-extern "C" void HAL_SUBGHZ_RxTxTimeoutCallback(SUBGHZ_HandleTypeDef *hsubghz){
+extern "C" void HAL_SUBGHZ_RxTxTimeoutCallback(SUBGHZ_HandleTypeDef* hsubghz){
 	SKWL::getInstance()->sxRadio.irqRxTxTimeoutCallback();
 }
-
-
-
-
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
@@ -269,8 +238,8 @@ extern "C" void HAL_SUBGHZ_RxTxTimeoutCallback(SUBGHZ_HandleTypeDef *hsubghz){
 /**
  * @brief This function handles Non maskable interrupt.
  */
-extern "C" void NMI_Handler(void) {
-	while (1) {
+extern "C" void NMI_Handler(void){
+	while(1){
 
 	}
 
@@ -279,8 +248,8 @@ extern "C" void NMI_Handler(void) {
 /**
  * @brief This function handles Hard fault interrupt.
  */
-extern "C" void HardFault_Handler(void) {
-	while (1) {
+extern "C" void HardFault_Handler(void){
+	while(1){
 
 	}
 }
@@ -288,8 +257,8 @@ extern "C" void HardFault_Handler(void) {
 /**
  * @brief This function handles Memory management fault.
  */
-extern "C" void MemManage_Handler(void) {
-	while (1) {
+extern "C" void MemManage_Handler(void){
+	while(1){
 
 	}
 }
@@ -297,8 +266,8 @@ extern "C" void MemManage_Handler(void) {
 /**
  * @brief This function handles Prefetch fault, memory access fault.
  */
-extern "C" void BusFault_Handler(void) {
-	while (1) {
+extern "C" void BusFault_Handler(void){
+	while(1){
 
 	}
 }
@@ -306,8 +275,8 @@ extern "C" void BusFault_Handler(void) {
 /**
  * @brief This function handles Undefined instruction or illegal state.
  */
-extern "C" void UsageFault_Handler(void) {
-	while (1) {
+extern "C" void UsageFault_Handler(void){
+	while(1){
 
 	}
 }
@@ -315,28 +284,28 @@ extern "C" void UsageFault_Handler(void) {
 /**
  * @brief This function handles System service call via SWI instruction.
  */
-extern "C" void SVC_Handler(void) {
+extern "C" void SVC_Handler(void){
 
 }
 
 /**
  * @brief This function handles Debug monitor.
  */
-extern "C" void DebugMon_Handler(void) {
+extern "C" void DebugMon_Handler(void){
 
 }
 
 /**
  * @brief This function handles Pendable request for system service.
  */
-extern "C" void PendSV_Handler(void) {
+extern "C" void PendSV_Handler(void){
 
 }
 
 /**
  * @brief This function handles System tick timer.
  */
-extern "C" void SysTick_Handler(void) {
+extern "C" void SysTick_Handler(void){
 
 	HAL_IncTick();
 	HAL_SYSTICK_IRQHandler();
@@ -345,11 +314,7 @@ extern "C" void SysTick_Handler(void) {
 /**
  * @brief This function handles SUBGHZ Radio Interrupt.
  */
-extern "C" void SUBGHZ_Radio_IRQHandler(void) {
-	HAL_SUBGHZ_IRQHandler(SKWL::getInstance()->subghz.getHandler());
+extern "C" void SUBGHZ_Radio_IRQHandler(void){
+	HAL_SUBGHZ_IRQHandler(SKWL::getInstance()->radioInterface.getHandler());
 }
-
-
-
-
 

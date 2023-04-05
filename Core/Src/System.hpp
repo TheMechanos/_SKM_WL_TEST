@@ -14,9 +14,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define SKM_PACKET_STATUS_QUEUE_SIZE 	10
-#define SKM_PACKET_TX_QUEUE_SIZE 		20
-#define SKM_PACKET_RX_QUEUE_SIZE 		20
+#define SKM_PACKET_STATUS_QUEUE_SIZE 	40
+#define SKM_PACKET_TX_QUEUE_SIZE 		4
+#define SKM_PACKET_RX_QUEUE_SIZE 		6
 
 #define ETL_NO_STL
 
@@ -35,6 +35,10 @@ public:
 
 	static void get12BUID(uint8_t* address);
 	static uint32_t getSKID();
+
+	static int logLn(const char *format, ...);
+
+	static int logSt(const char *format, ...);
 
 	static int log(const char *format, ...);
 
