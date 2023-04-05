@@ -37,7 +37,7 @@ public:
 	static uint32_t getSKID();
 
 	static int log(const char *format, ...);
-
+	static int logLn(const char *format, ...);
 
 private:
 	static uint16_t loopsInTenMs;

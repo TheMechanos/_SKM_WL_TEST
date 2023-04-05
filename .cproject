@@ -69,6 +69,7 @@
 									<listOptionValue builtIn="false" value="../Core/Lib/SebixFramework"/>
 									<listOptionValue builtIn="false" value="../Core/Lib/STM32WL_SebixFramework"/>
 									<listOptionValue builtIn="false" value="../Core/Src"/>
+									<listOptionValue builtIn="false" value="../Core/Lib/SKM"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti.595695569" name="Disable generation of information about every class with virtual functions (-fno-rtti)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.input.cpp.1290444655" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.input.cpp"/>
@@ -208,4 +209,5 @@
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 </cproject>

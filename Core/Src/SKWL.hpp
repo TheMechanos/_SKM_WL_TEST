@@ -24,10 +24,10 @@
 #include <System.hpp>
 
 #include <Interfaces/SubGhz/SubGhz.hpp>
-#include <Radio/Modules/RadioRFSwitch.hpp>
-#include <Radio/Modules/SX126x/Config/SXExampleConfig.hpp>
-#include <Radio/Modules/SX126x/SKMRadioSX126X.hpp>
-#include <Radio/SKM/Controllers/SKMController.hpp>
+#include <Modules/RadioRFSwitch.hpp>
+#include <Modules/SX126x/Config/SXExampleConfig.hpp>
+#include <Modules/SX126x/SKMRadioSX126X.hpp>
+#include <SKM/Controllers/SKMController.hpp>
 
 
 #include <Software/CircuralContainers/CircularQueue.h>

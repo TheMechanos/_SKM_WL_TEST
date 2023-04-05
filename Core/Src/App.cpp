@@ -80,11 +80,11 @@ void App::loop(){
 	//dev->sx.iterate();
 
 	if(dev->button[2].isMultiClick(2)){ //Send PacketStatusQueue
-		System::log("Packet status Queue (size=%d):", dev->radio.packetStatus.size());
+		System::logLn("Packet status Queue (size=%d):", dev->radio.packetStatus.size());
 
 		for (uint8_t q = 0; q < dev->radio.packetStatus.size(); q++){
 			SKMPacketStatus* s = &dev->radio.packetStatus[q];
-			System::log("ID: %d, status: %d, txTime: %d",s->id,s->status,s->sendedTime);
+			System::logLn("ID: %d, status: %d, txTime: %d",s->id,s->status,s->sendedTime);
 		}
 
 	}
