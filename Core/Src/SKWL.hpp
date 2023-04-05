@@ -24,7 +24,6 @@
 #include <System.hpp>
 
 #include <Interfaces/SubGhz/SubGhz.hpp>
-#include <Modules/RadioRFSwitch.hpp>
 #include <Modules/SX126x/Config/SXExampleConfig.hpp>
 #include <Modules/SX126x/Interfaces/HAL_STM32.hpp>
 #include <Modules/SX126x/SKMRadioSX126X.hpp>
@@ -64,16 +63,8 @@ public:
 	OUTPUT_ADVENCED led[3];
 	BUTTON_CLICK button[3];
 
-	OUTPUT_PIN rfSwTx;
-	OUTPUT_PIN rfSwRx;
-
-	SubGhz subghz;
-	RadioRFSwitch rfSw;
-
 	SKMRadioSX126X sxRadio;
-
 	SKMController radio;
-
 	SKM_SX126x_STM32_HAL_Interface radioInterface;
 
 

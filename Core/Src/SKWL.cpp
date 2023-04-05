@@ -47,10 +47,6 @@ SKWL::SKWL(){
 	button[1] = BUTTON_CLICK(&pinSw[1], 30);
 	button[2] = BUTTON_CLICK(&pinSw[2], 30);
 
-	rfSwTx = OUTPUT_PIN(&pinRfSwTx);
-	rfSwRx = OUTPUT_PIN(&pinRfSwRx);
-
-	rfSw = RadioRFSwitch(&rfSwTx, &rfSwRx);
 
 	radioInterface = SKM_SX126x_STM32_HAL_Interface(SKM_SX126x_STM32_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
 
@@ -77,10 +73,6 @@ void SKWL::init(){
 	//CONFIG INTERRUPT GROUPING - 4 bits for preemption priority,  0 bits for subpriority
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-	//Inicjalizacja switcha radiowego
-	rfSwTx.init();
-	rfSwRx.init();
-	rfSw.init();
 
 
 	led[0].init();
@@ -94,7 +86,6 @@ void SKWL::init(){
 
 	//Inicjalizacja Radia
 	__HAL_RCC_SUBGHZ_CLK_ENABLE();
-	subghz.init();
 
 	sxRadio.init();
 	sxRadio.config(&sxExampleGFSK);
@@ -350,7 +341,7 @@ extern "C" void SysTick_Handler(void) {
  * @brief This function handles SUBGHZ Radio Interrupt.
  */
 extern "C" void SUBGHZ_Radio_IRQHandler(void) {
-	HAL_SUBGHZ_IRQHandler(SKWL::getInstance()->subghz.getHandler());
+	HAL_SUBGHZ_IRQHandler(SKWL::getInstance()->radioInterface.getHandler());
 }
 
 
