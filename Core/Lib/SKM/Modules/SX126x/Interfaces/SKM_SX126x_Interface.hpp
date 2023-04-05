@@ -13,6 +13,8 @@
 class SKM_SX126x_Interface {
 public:
 
+	virtual void init()=0;
+
 	virtual void switchTx()=0;
 	virtual void switchRx()=0;
 	virtual void switchNone()=0;

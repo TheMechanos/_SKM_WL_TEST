@@ -125,7 +125,7 @@ public:
 	}
 
 private:
-	SUBGHZ_HandleTypeDef handler = { };
+	SUBGHZ_HandleTypeDef handler = { 0 };
 	BaudRatePrescaller prescaller;
 	uint32_t priority;
 	PIN *txPin;

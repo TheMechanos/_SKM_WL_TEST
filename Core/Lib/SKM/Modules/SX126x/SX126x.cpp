@@ -13,7 +13,7 @@ SX126x::SX126x(SKM_SX126x_Interface* interface){
 }
 
 void SX126x::init() {
-
+	interface->init();
 }
 
 SX126x::RxBufferState SX126x::getRxBufferStatus(){
