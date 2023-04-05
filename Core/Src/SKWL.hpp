@@ -23,12 +23,11 @@
 
 #include <System.hpp>
 
-
-#include <Modules/SX1262/SKMRadioSX126X.hpp>
+#include <Interfaces/SubGhz/SubGhz.hpp>
+#include <Radio/Modules/RadioRFSwitch.hpp>
+#include <Radio/Modules/SX126x/Config/SXExampleConfig.hpp>
+#include <Radio/Modules/SX126x/SKMRadioSX126X.hpp>
 #include <Radio/SKM/Controllers/SKMController.hpp>
-
-#include <Modules/SX1262/Config/SXExampleConfig.hpp>
-#include <RadioInterface.hpp>
 
 
 #include <Software/CircuralContainers/CircularQueue.h>
@@ -65,7 +64,12 @@ public:
 	OUTPUT_ADVENCED led[3];
 	BUTTON_CLICK button[3];
 
-	RadioInterface radioInterface;
+	OUTPUT_PIN rfSwTx;
+	OUTPUT_PIN rfSwRx;
+
+	SubGhz subghz;
+	RadioRFSwitch rfSw;
+
 	SKMRadioSX126X sxRadio;
 
 	SKMController radio;
