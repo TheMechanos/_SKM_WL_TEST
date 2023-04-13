@@ -75,4 +75,18 @@ int System::logLn(const char *format, ...)
    return done;
 }
 
+int System::log(const char *format, ...)
+{
+   va_list arg;
+   int done;
+
+   printf("SKWL-[LOG-%04d.%03d] ", getTick()/1000 , getTick()%1000);
+
+   va_start (arg, format);
+   done = vfprintf (stdout, format, arg);
+   va_end (arg);
+
+   return done;
+}
+
 

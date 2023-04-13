@@ -10,10 +10,10 @@
 
 #include "SKM_SX126x_Interface.hpp"
 
-#define SF_SUBGHZ_CRITICAL_START() //uint32_t primask_bit= __get_PRIMASK();__disable_irq()
-#define SF_SUBGHZ_CRITICAL_END() //__set_PRIMASK(primask_bit)
+#define SF_SUBGHZ_CRITICAL_START() uint32_t primask_bit= __get_PRIMASK();__disable_irq()
+#define SF_SUBGHZ_CRITICAL_END() __set_PRIMASK(primask_bit)
 
-class SKM_SX126x_STM32_HAL_Interface : public SKM_SX126x_Interface {
+class SKM_SX126x_STM32WL_HAL_Interface : public SKM_SX126x_Interface {
 public:
 	enum class BaudRatePrescaller {
 		BR2 = SUBGHZSPI_BAUDRATEPRESCALER_2,
@@ -26,8 +26,8 @@ public:
 		BR256 = SUBGHZSPI_BAUDRATEPRESCALER_256,
 	};
 
-	SKM_SX126x_STM32_HAL_Interface() = default;
-	SKM_SX126x_STM32_HAL_Interface(BaudRatePrescaller prescaller, uint32_t priority, PIN* txPin, PIN* rxPin){
+	SKM_SX126x_STM32WL_HAL_Interface() = default;
+	SKM_SX126x_STM32WL_HAL_Interface(BaudRatePrescaller prescaller, uint32_t priority, PIN* txPin, PIN* rxPin){
 		this->prescaller = prescaller;
 		this->priority = priority;
 		this->txPin = txPin;

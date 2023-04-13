@@ -18,15 +18,11 @@
 
 class SKMRadioSX126X : public SX126x, public SKMRadio{
 public:
-	/*enum class Mode{
-		Disabled, SendOnly, ContRx, RxWithAutoTx
-	};*/
 
 	SKMRadioSX126X()=default;
 	SKMRadioSX126X(SKM_SX126x_Interface* interface);
 
 	void configTxTimeout(uint16_t msTxTimeout);
-
 
 	virtual void iterate();
 
@@ -36,8 +32,8 @@ public:
 
 	virtual State getState();
 
-	virtual void sendPacket(SKMPacket* packet);
-	virtual uint16_t importAvalaiblePacket(SKMPacket* packet);
+	virtual bool sendPacket(SKMPacketTx* packet);
+	virtual SKMPacketRx* importAvalaiblePacket();
 
 
 	void setModeTxContinousWave();
@@ -53,19 +49,15 @@ public:
 
 private:
 
-	void transmitPacket(SKMPacket* packet, uint32_t timeout);
-	uint8_t receivePacket(SKMPacket* packet, uint32_t timeout);
+	bool transmitPacket(SKMPacketTx* packet, uint32_t timeout);
+	uint8_t receivePacket(SKMPacketRx* packet, uint32_t timeout);
 
-	void transmit(uint8_t* buffer, uint8_t size, uint32_t timeout);
+	bool transmit(uint8_t* buffer, uint8_t size, uint32_t timeout);
 	uint8_t receive(uint8_t* buffer, uint8_t maxSize, uint32_t timeout);
 
 	uint16_t txTimeout;
 
 	bool isSleep;
-	bool isReceiving;
-
-	//CircularQueue<SKMPacket, SKM_PACKET_TX_QUEUE_SIZE> txQueue;
-	//CircularQueue<SKMPacket, SKM_PACKET_RX_QUEUE_SIZE> rxQueue;
 
 };
 

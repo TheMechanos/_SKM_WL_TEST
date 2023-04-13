@@ -43,7 +43,7 @@ public:
 		txParams.power = SX126x::TxParams::Power::P22dBm;
 		txParams.ramp = SX126x::TxParams::Ramp::RAMP_40U;
 
-		frequency = 868800000;
+		frequency = 867200000;
 
 		txClamp = true;
 		rxGain = true;

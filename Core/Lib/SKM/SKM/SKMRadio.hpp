@@ -21,7 +21,7 @@ public:
 class SKMRadio{
 public:
 	enum class State {
-		Sleep, Busy, Idle, Rx, Tx
+		Sleep, Idle, Rx, Tx
 	};
 
 	virtual void iterate(){};
@@ -33,8 +33,8 @@ public:
 	virtual State getState()=0;
 
 
-	virtual void sendPacket(SKMPacket* packet)=0;
-	virtual uint16_t importAvalaiblePacket(SKMPacket* packet)=0;
+	virtual bool sendPacket(SKMPacketTx* packet)=0;
+	virtual SKMPacketRx* importAvalaiblePacket()=0;
 
 	void registerListner(SKMRadioListner* listner){
 		this->listner = listner;

@@ -16,10 +16,25 @@
 
 #include <Software/Vector/Vector.h>
 
+#include <LinkedList.hpp>
+
+#include <random>
+
+//#define DEBUG_SKM_CONTROLLER
+
+
 class SKMController : public SKMRadioListner{
 public:
+
+	typedef std::function<void(SKMPacket* packet)> SKMOnRxCallback;
+
+	struct SKMOnRxCallbackInfo{
+		SKMOnRxCallback callback;
+		SKMPacket::Type type;
+	};
+
 	SKMController();
-	SKMController(SKMRadio* radio);
+	SKMController(SKMRadio* radio, SKMPacket::Address nodeAddress);
 
 
 	void init();
@@ -29,31 +44,35 @@ public:
 	void disable();
 	bool isEnabled();
 
-	void send(SKMPacket* packet);
+	void onRx(SKMPacket::Type packetType, SKMOnRxCallback callback);
+
+	void send(SKMPacketTx* packet);
 
 	virtual void onTxDone();
 	virtual void onRxDone();
 	virtual void onTxRxFail();
 
-//private:
+private:
+
+	void progressPacket(SKMPacketRx* packet);
+
 	SKMRadio* radio;
 
-	SKMPacketStatus arrayPacketStatus[SKM_PACKET_STATUS_QUEUE_SIZE];
-	Vector<SKMPacketStatus> packetStatus;
+	LinkedList<SKMPacketTx> txQueue;
+	SKMPacketTx transmitingPacket;
+	LinkedList<SKMPacketTx> txedQueue;
+	LinkedList<SKMPacketRx> rxQueue;
 
-	SKMPacket arrayTxQueue[SKM_PACKET_TX_QUEUE_SIZE];
-	Vector<SKMPacket> txQueue;
+	LinkedList<SKMOnRxCallbackInfo> onRxCallbackList;
 
-	SKMPacket arrayRxQueue[SKM_PACKET_RX_QUEUE_SIZE];
-	Vector<SKMPacket> rxQueue;
+	SKMPacket::Address nodeAddress;
 
+	bool transmiting;
 
-
-	int16_t actualSendingPacketIndex;
 
 	bool enabled;
 
-	SKMPacketStatus* getPacketStatus(SKMPacket* source);
+
 
 };
 

@@ -29,6 +29,7 @@ public:
 	virtual bool readRegisters(uint8_t Address, uint8_t *pBuffer, uint16_t Size)=0;
 	virtual bool writeRegister(uint8_t Address, uint8_t Value)=0;
 	virtual bool readRegister(uint8_t Address, uint8_t *pValue)=0;
+
 };
 
 #endif /* LIB_SKM_SKM_SX1262_INTERFACE_HPP_ */

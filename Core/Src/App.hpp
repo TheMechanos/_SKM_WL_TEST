@@ -33,7 +33,6 @@ private:
 
 	void init();
 	void loop();
-	void loop10ms();
 
 	uint8_t buffer[10];
 

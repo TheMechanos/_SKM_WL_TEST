@@ -9,70 +9,133 @@
 #define SRC_SX1262_PACKET_HPP_
 
 #include <System.hpp>
-#include "RawPacket.hpp"
 #include <stdio.h>
 #include <string.h>
 
+#include <LinkedList.hpp>
 
-class SKMPacketStatus{
+class SKMPacket {
 public:
-	SKMPacketStatus(){
-		id=0;
-		status = Status::None;
-	}
-	SKMPacketStatus(uint16_t id){
-		this->id = id;
-		status = Status::None;
-	}
+	constexpr static const uint8_t SizeHeader = 22;
+	constexpr static const uint8_t SizeDataMax = 230;
+	constexpr static const uint8_t SizePacketMax = SizeHeader + SizeDataMax;
 
-	enum class Status{
-		None, InTxQueue,Transmitting, Transmitted, Acknowledged, Timeouted, TxFail
+	constexpr static const uint16_t SKM_SIGNATURE = 0x534B;
+
+	constexpr static const uint16_t FLAG_ACK_PACKET = (1 < 0);
+
+	typedef uint32_t Address;
+	typedef uint16_t Type;
+
+	union Header {
+		struct {
+			uint16_t signature;
+
+			Address destinyAddress;
+			Address sourceAddress;
+			Address senderAddress;
+
+			Type type;
+			uint16_t id;
+			uint8_t flags;
+			uint8_t hops;
+			uint16_t cryptoKey;
+		};
+
+		uint8_t idx[SizeHeader];
 	};
-	Status status;
 
-	uint16_t id;
+	typedef uint8_t PacketData;
+	typedef PacketData PacketDataArray[SizeDataMax];
 
-	uint32_t sendedTime;
+protected:
+	union {
+		struct {
+			Header header;
+			PacketDataArray data;
+		};
+		uint8_t idx[SizePacketMax];
+	};
+	uint8_t dataSize;
+
+public:
+	~SKMPacket();
+	SKMPacket();
+
+	Header getHeader();
+	PacketData* getData();
+	uint8_t* getTotalIdx();
+
+	uint8_t getDataSize();
+	uint8_t getHeaderSize();
+	uint8_t getTotalSize();
+
+
+	uint8_t getMaxDataSize();
+
+	void printInfo();
+	void printAllHex();
+
 };
 
-class SKMPacket : public SKMRawPacket {
+class SKMPacketTx : public SKMPacket {
 public:
+	typedef std::function<void(SKMPacketTx* instance)> PacketCallback;
+	struct TxConfig {
+		Address destinyAddress = 0;
+		Type type = 0;
+		uint16_t retransmitionCountMax = 3;
+		uint32_t ackTimout = 250;
+	};
 
-	void setDataSize(uint8_t dataSize){
-		this->size = dataSize + SizeHeader;
-	}
-	void setTotalSize(uint8_t size){
-		this->size = size;
-	}
+public:
+	~SKMPacketTx();
+	SKMPacketTx();
+	SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetConfig);
 
-	void clear(){
-		memset(idx, 0x00, getPacketMaxLength());
-	}
+	bool isAckTimeout();
+	bool canDoRetransmition();
 
-	uint8_t getPacketMaxLength(){
-		return SizeHeader + SizeDataMax;
-	}
-	uint8_t getTotalSize(){
-		return size;
-	}
-	uint8_t getDataSize(){
-		return size - SizeHeader;
-	}
+	void config(Header header);
 
-	uint8_t& operator[](size_t el){
-		return dataIdx[el];
-	}
-	const uint8_t& operator[](size_t el) const{
-		return dataIdx[el];
-	}
+	void doTx();
+
+	uint32_t getTxTime();
+
+	void onFail(PacketCallback onFail);
+	void onSent(PacketCallback onSent);
+	void onAck(PacketCallback onAck);
+
+	void runOnFail();
+	void runOnSent();
+	void runOnAck();
 
 
 
 private:
-	uint8_t size;
+	LinkedList<PacketCallback> onFailList;
+	LinkedList<PacketCallback> onSentList;
+	LinkedList<PacketCallback> onAckList;
 
+	TxConfig txConfig;
+
+	uint16_t retransmitionCount;
+	uint32_t txTime;
 };
 
+class SKMPacketRx : public SKMPacket {
+public:
+	~SKMPacketRx();
+	SKMPacketRx();
+	SKMPacketRx(uint8_t* dataAll, size_t sizeAll);
 
+	bool isValid();
+
+	uint32_t getRxTime();
+
+private:
+	uint32_t rxTime;
+
+};
 
 #endif /* SRC_SX1262_PACKET_HPP_ */

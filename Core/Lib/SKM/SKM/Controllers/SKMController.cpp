@@ -8,15 +8,15 @@
 #include "SKMController.hpp"
 
 SKMController::SKMController(){
+	transmiting = false;
 
 }
 
-SKMController::SKMController(SKMRadio* radio){
+SKMController::SKMController(SKMRadio* radio, SKMPacket::Address nodeAddress) :
+		SKMController(){
 	this->radio = radio;
+	this->nodeAddress = nodeAddress;
 
-	this->actualSendingPacketIndex = -1;
-
-	SKMController();
 }
 
 void SKMController::enable(){
@@ -31,134 +31,155 @@ bool SKMController::isEnabled(){
 	return enabled;
 }
 
-
 void SKMController::init(){
 	enable();
 	radio->registerListner(this);
 
-	packetStatus.setStorage(arrayPacketStatus, SKM_PACKET_STATUS_QUEUE_SIZE, 0);
-	txQueue.setStorage(arrayTxQueue, SKM_PACKET_TX_QUEUE_SIZE, 0);
-	rxQueue.setStorage(arrayRxQueue, SKM_PACKET_TX_QUEUE_SIZE, 0);
-
 }
 
 void SKMController::iterate(){
-	if(!isEnabled())return;
-
+	if(!isEnabled())
+		return;
 
 	if(txQueue.size() > 0){
 
-		auto st = radio->getState();
-		if(st == SKMRadio::State::Rx || st == SKMRadio::State::Idle){ //Jeśli radio może nadawać
+		SKMPacketTx packet = txQueue.shift();
+		bool sended = radio->sendPacket(&packet);
+		if(sended){
+#ifdef DEBUG_SKM_CONTROLLER
+			System::logLn("Packet ID: %d was push to send.", packet.getHeader().id);
+#endif
+			transmitingPacket = packet;
+			transmiting = true;
+		}else{
+#ifdef DEBUG_SKM_CONTROLLER
+			System::logLn("At this moment can't push packet ID: %d to send!", packet.getHeader().id);
+#endif
+			txQueue.add(0, packet);
+		}
+	}
 
-			for (uint8_t q = 0; q < txQueue.size(); q++){ //Po wszystkich pakietach z kolejki
-				SKMPacketStatus* stat = getPacketStatus(&txQueue[q]);
+	if(txedQueue.size() > 0){
+		auto packet = txedQueue.shift();
 
-				if(stat != 0){ //Jeśli status pakietu istnieje
-					if(stat->status == SKMPacketStatus::Status::InTxQueue){//Jeśli pakiet czeka na nadanie
+		if(packet.isAckTimeout()){
 
-						stat->status = SKMPacketStatus::Status::Transmitting;
-						actualSendingPacketIndex = q;
+			if(packet.canDoRetransmition()){
+#ifdef DEBUG_SKM_CONTROLLER
+				System::logLn("Packet ID: %d ack timeouted, push to retransmition!", transmitingPacket.getHeader().id);
+#endif
+				txQueue.add(packet);
 
-						radio->sendPacket(&txQueue[q]);
-
-						System::logLn("Packet id: %d writted to send!", txQueue[q].header.packet.id);
-
-						break;//Wyjdz z pętli
-					}
-				}
+			}else{
+#ifdef DEBUG_SKM_CONTROLLER
+				System::logLn("Packet ID: %d ack timeouted, end of retransmition tries.", transmitingPacket.getHeader().id);
+#endif
+				packet.runOnFail();
 			}
+
+		}else{
+			txedQueue.add(packet);
 		}
 
 	}
 
 	if(rxQueue.size() > 0){
-		SKMPacket p = rxQueue.back();
-		rxQueue.pop_back();
+		SKMPacketRx p = rxQueue.shift();
 
-		System::logLn("Received packet ID: %d, was procedded!",p.header.packet.id, p.getDataSize());
+		progressPacket(&p);
 
 	}
+
 }
 
-SKMPacketStatus* SKMController::getPacketStatus(SKMPacket* source){
-	for(uint8_t q=0;q<packetStatus.size();q++){
-		if(packetStatus[q].id == source->header.packet.id){
-			return &packetStatus[q];
-		}
-	}
-	return 0;
+void SKMController::onRx(SKMPacket::Type packetType, SKMOnRxCallback callback){
+	SKMOnRxCallbackInfo i;
+	i.type = packetType;
+	i.callback = callback;
+	onRxCallbackList.add(i);
 }
 
-void SKMController::send(SKMPacket* packet){
-	if(!enabled)return;
+void SKMController::send(SKMPacketTx* packet){
+	if(!enabled)
+		return;
 
-	//Jesli status pełny
-	System::logLn("Packet Status Queue size: %d",packetStatus.size());
-	if(packetStatus.full()){
-		packetStatus.remove(0);
-		System::logLn("Status Queue full, delete last item");
+	SKMPacket::Header cfg;
+	cfg.senderAddress = nodeAddress;
+	cfg.sourceAddress = nodeAddress;
+	cfg.id = rand() % 0xFFFF;
+	cfg.flags = 0x00;
+	cfg.cryptoKey = 0;
+
+	packet->config(cfg);
+
+	txQueue.add(*packet);
+#ifdef DEBUG_SKM_CONTROLLER
+	System::logLn("Packet ID: %d, added to TXQueue!", packet->getHeader().id);
+#endif
+}
+
+void SKMController::progressPacket(SKMPacketRx* packet){
+	for (int q = 0; q < onRxCallbackList.size(); q++){
+		onRxCallbackList[q].callback(packet);
 	}
-	//Dodaj status do listy
-
-	SKMPacketStatus stat(packet->header.packet.id);
-	stat.status = SKMPacketStatus::Status::InTxQueue;
-	packetStatus.push_back(stat);
-	System::logLn("Packet ID: %d, added to TXQueue!",packet->header.packet.id);
-
-	//Dodaj do kolejki wysyłkowej
-	txQueue.push_back(*packet);
-	System::logLn("TXQueue size: %d",txQueue.size());
-
-
 }
 
 void SKMController::onTxRxFail(){
-	if(!enabled)return;
+	if(!enabled)
+		return;
 
-	if(actualSendingPacketIndex >= 0){
+	if(transmiting){
+		if(transmitingPacket.canDoRetransmition()){
+#ifdef DEBUG_SKM_CONTROLLER
+			System::logLn("Fail to send packet ID: %d, push to retransmition!", transmitingPacket.getHeader().id);
+#endif
+			txQueue.add(transmitingPacket);
 
-		SKMPacketStatus* status = getPacketStatus(&txQueue[actualSendingPacketIndex]);
-		if(status){
-			status->status = SKMPacketStatus::Status::TxFail;
-			System::logLn("Fail to send packet ID: %d",status->id);
-
-			txQueue.remove(actualSendingPacketIndex);
+		}else{
+#ifdef DEBUG_SKM_CONTROLLER
+			System::logLn("Fail to send packet ID: %d, end of retransmition tries.", transmitingPacket.getHeader().id);
+#endif
+			transmitingPacket.runOnFail();
 		}
-
+		transmiting = false;
 	}
-	actualSendingPacketIndex = -1;
 
 	radio->setRx();
 }
 
 void SKMController::onTxDone(){
-	if(!enabled)return;
+	if(!enabled)
+		return;
 
-	if(actualSendingPacketIndex >= 0){
-		SKMPacketStatus* status = getPacketStatus(&txQueue[actualSendingPacketIndex]);
-		if(status){
-			status->status = SKMPacketStatus::Status::Transmitted;
-			status->sendedTime = System::getTick();
-			System::logLn("Packet ID: %d succesfull transmitted at time: %d",status->id, status->sendedTime);
-
-			txQueue.remove(actualSendingPacketIndex);
-		}
-
+	if(transmiting){
+		transmiting = false;
+		transmitingPacket.doTx();
+		transmitingPacket.runOnSent();
+		txedQueue.add(transmitingPacket);
+#ifdef DEBUG_SKM_CONTROLLER
+		System::logLn("Packet ID: %d, succesfull transmited.", transmitingPacket.getHeader().id);
+#endif
 	}
-	actualSendingPacketIndex = -1;
-	//dodać sortowan
+
 	radio->setRx();
 }
 
 void SKMController::onRxDone(){
-	if(!enabled)return;
+	if(!enabled)
+		return;
 
-	SKMPacket pack;
-	radio->importAvalaiblePacket(&pack);
-	rxQueue.push_back(pack);
+	SKMPacketRx *pack = radio->importAvalaiblePacket();
 
-	System::logLn("Receive Packet ID: %d",pack.header.packet.id);
+	if(pack != nullptr){
+		if(pack->isValid()){
+			rxQueue.add(*pack);
+			#ifdef DEBUG_SKM_CONTROLLER
+				System::logLn("Receive Packet ID: %d", pack->getHeader().id);
+			#endif
+		}
+		delete pack;
+
+	}
 
 	radio->setRx();
 }

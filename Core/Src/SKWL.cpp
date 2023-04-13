@@ -38,7 +38,6 @@ SKWL::SKWL(){
 	pinRfSwRx = PIN(GPIOA, GPIO_PIN_4);
 
 
-
 	led[0] = OUTPUT_ADVENCED(&pinLed[0]);
 	led[1] = OUTPUT_ADVENCED(&pinLed[1]);
 	led[2] = OUTPUT_ADVENCED(&pinLed[2]);
@@ -48,11 +47,11 @@ SKWL::SKWL(){
 	button[2] = BUTTON_CLICK(&pinSw[2], 30);
 
 
-	radioInterface = SKM_SX126x_STM32_HAL_Interface(SKM_SX126x_STM32_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
+	radioInterface = SKM_SX126x_STM32WL_HAL_Interface(SKM_SX126x_STM32WL_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
 
 	sxRadio = SKMRadioSX126X(&radioInterface);
 
-	radio = SKMController(&sxRadio);
+	radio = SKMController(&sxRadio, System::getSKID());
 
 
 
@@ -74,7 +73,6 @@ void SKWL::init(){
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
 
-
 	led[0].init();
 	led[1].init();
 	led[2].init();
@@ -94,6 +92,8 @@ void SKWL::init(){
 
 
 	initUart();
+
+	//srand(System::getSKID());
 
 
 }
