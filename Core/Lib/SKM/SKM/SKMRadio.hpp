@@ -11,7 +11,7 @@
 #include <System.hpp>
 #include "Packet.hpp"
 
-class SKMRadioListner{
+class SKMListner{
 public:
 	virtual void onTxDone()=0;
 	virtual void onRxDone()=0;
@@ -20,30 +20,20 @@ public:
 
 class SKMRadio{
 public:
-	enum class State {
-		Sleep, Idle, Rx, Tx
-	};
-
+	virtual void init()=0;
 	virtual void iterate(){};
-
-	virtual void setSleep()=0;
-	virtual void setIdle()=0;
-	virtual void setRx()=0;
-
-	virtual State getState()=0;
-
 
 	virtual bool sendPacket(SKMPacketTx* packet)=0;
 	virtual SKMPacketRx* importAvalaiblePacket()=0;
 
-	void registerListner(SKMRadioListner* listner){
+	virtual void registerListner(SKMListner* listner){
 		this->listner = listner;
 	}
 
-
-
 protected:
-	SKMRadioListner* listner;
+	SKMListner* listner = nullptr;
+
+
 };
 
 

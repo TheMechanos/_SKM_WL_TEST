@@ -34,6 +34,9 @@ private:
 	void init();
 	void loop();
 
+
+	SKMPacket::Address friendAddress;
+
 	uint8_t buffer[10];
 
 };

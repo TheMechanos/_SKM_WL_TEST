@@ -37,12 +37,23 @@ void App::init(){
 
 	dev->led[0].ON();
 
+	if(System::getSKID() == 0x0ED15193){
+		friendAddress = 0x1C8911DF;
+	}else{
+		friendAddress = 0x0ED15193;
+	}
+
+
+
 	dev->radio.onRx(1, [this](SKMPacket* packet){
-		System::logLn("odebrano pakiet!");
-		packet->printInfo();
-		packet->printAllHex();
-		dev->led[2].blinkNumber(1, 25, 25);
+		//System::logLn("odebrano pakiet!");
+		//packet->printInfo();
+		//packet->printAllHex();
+		//dev->led[2].blinkNumber(1, 25, 25);
+		dev->led[0].timeOFF(25);
 	});
+
+	System::logLn("\n\nSTART!\n");
 
 }
 
@@ -58,27 +69,30 @@ void App::loop(){
 		uint8_t data[10] = { 0x11, 0x22, 0x33, 0x44 };
 		SKMPacketTx::TxConfig cfg;
 
-		cfg.destinyAddress = 0x00000001;
+		cfg.destinyAddress = friendAddress;
 		cfg.type = q;
-		cfg.retransmitionCountMax = 3;
+		cfg.retransmitionCountMax = 2;
 
 		SKMPacketTx pac = SKMPacketTx(data, 10, cfg);
 
 		pac.onAck([](SKMPacketTx* packet){
 			System::logLn("OnAck!");
+			SKWL::getInstance()->led[2].timeON(250);
 		});
 		pac.onFail([](SKMPacketTx* packet){
 			System::logLn("OnFail!");
+			SKWL::getInstance()->led[1].timeON(50);
 		});
-		pac.onSent([](SKMPacketTx* packet){
-			System::logLn("OnSent!");
+		pac.onTx([](SKMPacketTx* packet){
+			System::logLn("OnTx!");
 		});
 
 		dev->radio.send(&pac);
 
-		dev->led[2].timeON(300);
+		dev->led[0].timeOFF(25);
 	}
 
+/*
 	if(dev->button[1].isPressed()){
 		if(txcw){
 			dev->sxRadio.setRx();
@@ -88,6 +102,6 @@ void App::loop(){
 			dev->led[1].blink(200, 200);
 		}
 		txcw = !txcw;
-	}
+	}*/
 
 }

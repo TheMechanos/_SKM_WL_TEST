@@ -68,6 +68,8 @@ void SX126x::config(SX126xConfig *conf) {
 
 	writePacketParams(conf->packetParams);
 	writeIrq((uint16_t) SX126x::IrqType::all, (uint16_t) SX126x::IrqType::all, 0, 0);
+
+	setModeRxCont();
 }
 
 

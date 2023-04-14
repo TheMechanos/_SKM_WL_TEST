@@ -24,19 +24,19 @@ public:
 
 	void configTxTimeout(uint16_t msTxTimeout);
 
+	virtual void init();
 	virtual void iterate();
 
 	virtual void setSleep();
 	virtual void setIdle();
 	virtual void setRx();
+	void setModeTxContinousWave();
 
-	virtual State getState();
+	//virtual State getState();
 
 	virtual bool sendPacket(SKMPacketTx* packet);
 	virtual SKMPacketRx* importAvalaiblePacket();
 
-
-	void setModeTxContinousWave();
 
 
 	void irqTxCpltCallback();

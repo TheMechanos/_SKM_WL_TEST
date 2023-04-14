@@ -22,7 +22,7 @@ public:
 
 	constexpr static const uint16_t SKM_SIGNATURE = 0x534B;
 
-	constexpr static const uint16_t FLAG_ACK_PACKET = (1 < 0);
+	constexpr static const uint16_t FLAG_ACK_PACKET = (1 << 0);
 
 	typedef uint32_t Address;
 	typedef uint16_t Type;
@@ -98,29 +98,30 @@ public:
 
 	void config(Header header);
 
-	void doTx();
+	void doTxed();
+	void doFailed();
+	void doAcked();
 
 	uint32_t getTxTime();
 
+	void onTx(PacketCallback onSent);
 	void onFail(PacketCallback onFail);
-	void onSent(PacketCallback onSent);
 	void onAck(PacketCallback onAck);
-
-	void runOnFail();
-	void runOnSent();
-	void runOnAck();
-
-
 
 private:
 	LinkedList<PacketCallback> onFailList;
-	LinkedList<PacketCallback> onSentList;
+	LinkedList<PacketCallback> onTxList;
 	LinkedList<PacketCallback> onAckList;
+	void runOnFail();
+	void runOnTx();
+	void runOnAck();
 
 	TxConfig txConfig;
 
 	uint16_t retransmitionCount;
+
 	uint32_t txTime;
+	uint32_t ackTime;
 };
 
 class SKMPacketRx : public SKMPacket {

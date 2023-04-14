@@ -40,6 +40,7 @@ uint8_t SKMPacket::getMaxDataSize(){
 }
 
 void SKMPacket::printInfo(){
+	System::logLn("-----------------------------------------------------");
 	System::logLn("-------------------- PACKET INFO --------------------");
 	System::logLn("Address dest : 0x%08X", header.destinyAddress);
 	System::logLn("Address src  : 0x%08X", header.sourceAddress);
@@ -47,50 +48,59 @@ void SKMPacket::printInfo(){
 
 	System::logLn("Packet id    : %u", header.id);
 	System::logLn("Packet flags : 0x%04X", header.flags);
-	System::logLn("");
+	System::logLn("-----------------------------------------------------");
+	System::logLn("-----------------------------------------------------\n");
 }
 
 void SKMPacket::printAllHex(){
 
 	char buf[128];
-	size_t pos=0;
+	size_t pos = 0;
 
+	System::logLn("-----------------------------------------------------------");
 	System::logLn("-------------------- PACKET HEX HEADER --------------------");
 	for (uint8_t q = 0; q < getHeaderSize(); q++){
 		pos += sprintf(&buf[pos], "0x%02X ", header.idx[q]);
 	}
 	System::logLn("%s", buf);
-	pos=0;
-
+	pos = 0;
 
 	System::logLn("--------------------- PACKET HEX DATA ---------------------");
 	for (uint8_t q = 0; q < getDataSize(); q++){
 		pos += sprintf(&buf[pos], "0x%02X ", data[q]);
 
 		if(q % 8 == 0 && q > 0){
-			pos=0;
+			pos = 0;
 			System::logLn("%s", buf);
 		}
 	}
-	if(pos>0)
+	if(pos > 0)
 		System::logLn("%s", buf);
 
-	printf("\n");
+	System::logLn("-----------------------------------------------------------");
+	System::logLn("-----------------------------------------------------------\n");
 
 }
 
+//-----------------------------------------------------------------------------------------------------------------
+
 SKMPacketTx::~SKMPacketTx(){
 	onFailList.clear();
-	onSentList.clear();
+	onTxList.clear();
 	onAckList.clear();
 }
 
 SKMPacketTx::SKMPacketTx() :
 		SKMPacket(){
 
+	retransmitionCount=0;
+	ackTime=0;
+	txTime=0;
+
+
 }
 
-SKMPacketTx::SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetTxConfig){
+SKMPacketTx::SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetTxConfig) :SKMPacketTx(){
 	if(sizeData > SizeDataMax)
 		return;
 
@@ -107,7 +117,7 @@ bool SKMPacketTx::isAckTimeout(){
 }
 
 bool SKMPacketTx::canDoRetransmition(){
-	if(retransmitionCount + 2 > txConfig.retransmitionCountMax){
+	if(retransmitionCount >= txConfig.retransmitionCountMax){
 		return false;
 	}
 	retransmitionCount++;
@@ -122,8 +132,20 @@ void SKMPacketTx::config(Header newHeader){
 	this->header.signature = SKM_SIGNATURE;
 }
 
-void SKMPacketTx::doTx(){
+void SKMPacketTx::doTxed(){
 	this->txTime = System::getTick();
+	runOnTx();
+}
+
+void SKMPacketTx::doFailed(){
+	runOnFail();
+
+}
+
+void SKMPacketTx::doAcked(){
+	ackTime = System::getTick();
+	runOnAck();
+
 }
 
 uint32_t SKMPacketTx::getTxTime(){
@@ -133,8 +155,8 @@ uint32_t SKMPacketTx::getTxTime(){
 void SKMPacketTx::onFail(PacketCallback onFail){
 	onFailList.add(onFail);
 }
-void SKMPacketTx::onSent(PacketCallback onSent){
-	onSentList.add(onSent);
+void SKMPacketTx::onTx(PacketCallback onSent){
+	onTxList.add(onSent);
 }
 void SKMPacketTx::onAck(PacketCallback onAck){
 	onAckList.add(onAck);
@@ -144,14 +166,16 @@ void SKMPacketTx::runOnFail(){
 	for (int q = 0; q < onFailList.size(); q++)
 		onFailList[q](this);
 }
-void SKMPacketTx::runOnSent(){
-	for (int q = 0; q < onSentList.size(); q++)
-		onSentList[q](this);
+void SKMPacketTx::runOnTx(){
+	for (int q = 0; q < onTxList.size(); q++)
+		onTxList[q](this);
 }
 void SKMPacketTx::runOnAck(){
 	for (int q = 0; q < onAckList.size(); q++)
 		onAckList[q](this);
 }
+
+//-----------------------------------------------------------------------------------------------------------------
 
 SKMPacketRx::~SKMPacketRx(){
 }
@@ -174,3 +198,4 @@ uint32_t SKMPacketRx::getRxTime(){
 bool SKMPacketRx::isValid(){
 	return header.signature == SKM_SIGNATURE;
 }
+

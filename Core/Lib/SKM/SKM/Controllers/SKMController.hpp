@@ -20,10 +20,10 @@
 
 #include <random>
 
-//#define DEBUG_SKM_CONTROLLER
+#define DEBUG_SKM_CONTROLLER
 
 
-class SKMController : public SKMRadioListner{
+class SKMController : public SKMListner{
 public:
 
 	typedef std::function<void(SKMPacket* packet)> SKMOnRxCallback;
@@ -55,6 +55,8 @@ public:
 private:
 
 	void progressPacket(SKMPacketRx* packet);
+
+	SKMPacketTx getAckPacket(SKMPacketRx* rxPacket);
 
 	SKMRadio* radio;
 
