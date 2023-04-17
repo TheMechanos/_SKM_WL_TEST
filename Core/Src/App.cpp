@@ -45,11 +45,10 @@ void App::init(){
 
 
 
-	dev->radio.onRx(1, [this](SKMPacket* packet){
-		//System::logLn("odebrano pakiet!");
-		//packet->printInfo();
-		//packet->printAllHex();
-		//dev->led[2].blinkNumber(1, 25, 25);
+	dev->radio.onRx(1, [this](SKMPacketRx* packet){
+		System::logLn("Odebrano pakiet, moc: %ddBm!", packet->getdBm());
+		packet->printInfo();
+		packet->printAllHex();
 		dev->led[0].timeOFF(25);
 	});
 

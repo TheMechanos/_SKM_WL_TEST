@@ -39,7 +39,10 @@ void SKMRadioSX126X::setIdle(){
 }
 
 void SKMRadioSX126X::setRx(){
-	setModeRxCont();
+	setConfigPacketSize();
+
+
+	setModeRx();
 	isSleep = false;
 }
 
@@ -88,7 +91,7 @@ SKMPacketRx* SKMRadioSX126X::importAvalaiblePacket(){
 			uint8_t buf[rxb.payloadLengthRx];
 			readBuffer(rxb.rxStartBufferPointer, buf, rxb.payloadLengthRx);
 
-			SKMPacketRx *packet = new SKMPacketRx(buf, rxb.payloadLengthRx);
+			SKMPacketRx *packet = new SKMPacketRx(buf, rxb.payloadLengthRx, packetStatus.GFSK.rssiAvg);
 
 			return packet;
 		}

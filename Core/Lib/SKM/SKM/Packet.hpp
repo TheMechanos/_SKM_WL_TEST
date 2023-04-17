@@ -70,6 +70,8 @@ public:
 	uint8_t getHeaderSize();
 	uint8_t getTotalSize();
 
+	bool isAckPacket();
+
 
 	uint8_t getMaxDataSize();
 
@@ -103,6 +105,8 @@ public:
 	void doAcked();
 
 	uint32_t getTxTime();
+	uint32_t getAckTime();
+	uint32_t getInFlightTime();
 
 	void onTx(PacketCallback onSent);
 	void onFail(PacketCallback onFail);
@@ -128,14 +132,19 @@ class SKMPacketRx : public SKMPacket {
 public:
 	~SKMPacketRx();
 	SKMPacketRx();
-	SKMPacketRx(uint8_t* dataAll, size_t sizeAll);
+	SKMPacketRx(uint8_t* dataAll, size_t sizeAll, int8_t rssi=0);
 
 	bool isValid();
 
 	uint32_t getRxTime();
 
+	int32_t getdBm();
+
+	SKMPacketTx generateAckPacket();
+
 private:
 	uint32_t rxTime;
+	int8_t rssi;
 
 };
 

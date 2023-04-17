@@ -27,8 +27,9 @@
 
 class SKMController : public SKMListner{
 public:
+	constexpr static const bool LOG_ENABLE = true;
 
-	typedef std::function<void(SKMPacket* packet)> SKMOnRxCallback;
+	typedef std::function<void(SKMPacketRx* packet)> SKMOnRxCallback;
 
 	struct SKMOnRxCallbackInfo{
 		SKMOnRxCallback callback;
@@ -58,7 +59,7 @@ private:
 
 	void progressPacket(SKMPacketRx* packet);
 
-	SKMPacketTx getAckPacket(SKMPacketRx* rxPacket);
+	static int SKMLogLn(const char *format, ...);
 
 	SKMRadio* radio;
 

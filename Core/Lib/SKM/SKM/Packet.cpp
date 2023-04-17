@@ -39,6 +39,10 @@ uint8_t SKMPacket::getMaxDataSize(){
 	return SizeDataMax;
 }
 
+bool SKMPacket::isAckPacket(){
+	return header.flags && FLAG_ACK_PACKET;
+}
+
 void SKMPacket::printInfo(){
 	System::logLn("-----------------------------------------------------");
 	System::logLn("-------------------- PACKET INFO --------------------");
@@ -93,14 +97,14 @@ SKMPacketTx::~SKMPacketTx(){
 SKMPacketTx::SKMPacketTx() :
 		SKMPacket(){
 
-	retransmitionCount=0;
-	ackTime=0;
-	txTime=0;
-
+	retransmitionCount = 0;
+	ackTime = 0;
+	txTime = 0;
 
 }
 
-SKMPacketTx::SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetTxConfig) :SKMPacketTx(){
+SKMPacketTx::SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetTxConfig) :
+		SKMPacketTx(){
 	if(sizeData > SizeDataMax)
 		return;
 
@@ -141,15 +145,19 @@ void SKMPacketTx::doFailed(){
 	runOnFail();
 
 }
-
 void SKMPacketTx::doAcked(){
 	ackTime = System::getTick();
 	runOnAck();
-
 }
 
 uint32_t SKMPacketTx::getTxTime(){
 	return txTime;
+}
+uint32_t SKMPacketTx::getAckTime(){
+	return ackTime;
+}
+uint32_t SKMPacketTx::getInFlightTime(){
+	return ackTime - txTime;
 }
 
 void SKMPacketTx::onFail(PacketCallback onFail){
@@ -184,11 +192,12 @@ SKMPacketRx::SKMPacketRx() :
 		SKMPacket(){
 }
 
-SKMPacketRx::SKMPacketRx(uint8_t* dataAll, size_t sizeAll){
+SKMPacketRx::SKMPacketRx(uint8_t* dataAll, size_t sizeAll, int8_t rssi){
 	if(sizeAll <= SizePacketMax)
 		memcpy(idx, dataAll, sizeAll);
 	dataSize = sizeAll - SizeHeader;
 	this->rxTime = System::getTick();
+	this->rssi = rssi;
 }
 
 uint32_t SKMPacketRx::getRxTime(){
@@ -197,5 +206,32 @@ uint32_t SKMPacketRx::getRxTime(){
 
 bool SKMPacketRx::isValid(){
 	return header.signature == SKM_SIGNATURE;
+}
+
+int32_t SKMPacketRx::getdBm(){
+	return rssi;//(0-rssi)/2;
+}
+
+SKMPacketTx SKMPacketRx::generateAckPacket(){
+
+	SKMPacketTx::TxConfig txConfig;
+
+	txConfig.type = header.type;
+	txConfig.ackTimout = 0;
+	txConfig.retransmitionCountMax = 0;
+	txConfig.destinyAddress = header.sourceAddress;
+
+	SKMPacketTx ackPack = SKMPacketTx(nullptr, 0, txConfig);
+
+	SKMPacket::Header cfg;
+	cfg.senderAddress = header.destinyAddress;
+	cfg.sourceAddress = header.destinyAddress;
+	cfg.id = header.id;
+	cfg.flags = SKMPacket::FLAG_ACK_PACKET;
+	cfg.cryptoKey = 0;
+
+	ackPack.config(cfg);
+
+	return ackPack;
 }
 

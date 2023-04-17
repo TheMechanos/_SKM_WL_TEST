@@ -45,6 +45,7 @@ public:
 
 	CircularQueue<char, 2048> logBuffor;
 
+
 	static SKWL* getInstance();
 
 public:
