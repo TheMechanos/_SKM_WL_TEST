@@ -22,6 +22,8 @@
 
 #define DEBUG_SKM_CONTROLLER
 
+#include <Modules/SX126x/SKMRadioSX126X.hpp>
+
 
 class SKMController : public SKMListner{
 public:

@@ -76,7 +76,12 @@ SKMPacketRx* SKMRadioSX126X::importAvalaiblePacket(){
 	if(getStatus().radio == Status::Radio::DataAvailable){
 
 		PacketStatus packetStatus = getPacketStatus();
-		if(packetStatus.GFSK.Status.crcError == false){
+		if(packetStatus.GFSK.Status.abortError == false &&
+				packetStatus.GFSK.Status.addressError == false &&
+				packetStatus.GFSK.Status.crcError == false &&
+				packetStatus.GFSK.Status.lengthError == false &&
+				packetStatus.GFSK.Status.preambleError == false &&
+				packetStatus.GFSK.Status.syncError == false){
 
 			RxBufferState rxb = getRxBufferStatus();
 
@@ -187,8 +192,8 @@ void SKMRadioSX126X::irqSyncWordValidCallback(){
 }
 
 void SKMRadioSX126X::irqCRCErrorCallback(){
-	listner->onTxRxFail();
-	setRx();
+	//listner->onTxRxFail();
+	//setRx();
 }
 
 void SKMRadioSX126X::irqRxTxTimeoutCallback(){

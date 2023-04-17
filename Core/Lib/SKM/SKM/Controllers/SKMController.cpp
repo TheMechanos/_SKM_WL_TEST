@@ -166,6 +166,12 @@ SKMPacketTx SKMController::getAckPacket(SKMPacketRx* rxPacket){
 }
 
 void SKMController::onTxRxFail(){
+
+	SKMRadioSX126X* rad = static_cast<SKMRadioSX126X*>(radio);
+
+	auto staus = rad->getStatus();
+
+
 	if(!enabled)
 		return;
 

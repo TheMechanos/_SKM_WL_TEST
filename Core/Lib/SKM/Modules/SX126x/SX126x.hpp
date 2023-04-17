@@ -320,8 +320,9 @@ protected:
 	void setModeRx(uint32_t usTimeout = 0);
 	void setModeRxCont();
 	void setModeTxContinousWave();
-
+public:
 	Status getStatus();
+protected:
 	RxBufferState getRxBufferStatus();
 	PacketStatus getPacketStatus();
 	int8_t getRssiInst();
