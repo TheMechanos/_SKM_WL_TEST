@@ -47,8 +47,8 @@ void App::init(){
 
 	dev->radio.onRx(1, [this](SKMPacketRx* packet){
 		System::logLn("Odebrano pakiet, moc: %ddBm!", packet->getdBm());
-		packet->printInfo();
-		packet->printAllHex();
+		//packet->printInfo();
+		//packet->printAllHex();
 		dev->led[0].timeOFF(25);
 	});
 
@@ -86,7 +86,7 @@ void App::loop(){
 			System::logLn("OnTx!");
 		});
 
-		dev->radio.send(&pac);
+		dev->radio.transmit(&pac);
 
 		dev->led[0].timeOFF(25);
 	}

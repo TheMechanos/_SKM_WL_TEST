@@ -27,7 +27,7 @@
 
 class SKMController : public SKMListner{
 public:
-	constexpr static const bool LOG_ENABLE = true;
+	constexpr static const bool LOG_ENABLE = false;
 
 	typedef std::function<void(SKMPacketRx* packet)> SKMOnRxCallback;
 
@@ -43,13 +43,13 @@ public:
 	void init();
 	void iterate();
 
-	void enable();
-	void disable();
-	bool isEnabled();
+	void transmit(SKMPacketTx* packet);
+
+
 
 	void onRx(SKMPacket::Type packetType, SKMOnRxCallback callback);
 
-	void send(SKMPacketTx* packet);
+
 
 	virtual void onTxDone();
 	virtual void onRxDone();
@@ -73,11 +73,6 @@ private:
 	SKMPacket::Address nodeAddress;
 
 	bool transmiting;
-
-
-	bool enabled;
-
-
 
 };
 

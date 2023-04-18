@@ -209,7 +209,7 @@ bool SKMPacketRx::isValid(){
 }
 
 int32_t SKMPacketRx::getdBm(){
-	return rssi;//(0-rssi)/2;
+	return rssi/2;//(0-rssi)/2;
 }
 
 SKMPacketTx SKMPacketRx::generateAckPacket(){
