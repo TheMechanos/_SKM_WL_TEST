@@ -15,25 +15,35 @@
 #include <LinkedList.hpp>
 
 class SKMPacket {
+	friend class SKMController;
 public:
-	constexpr static const uint8_t SizeHeader = 22;
-	constexpr static const uint8_t SizeDataMax = 230;
+
+	typedef uint32_t Address;
+	typedef uint16_t Type;
+
+	constexpr static const uint8_t SizeHeader = 26;
+	constexpr static const uint8_t SizeDataMax = 220;
 	constexpr static const uint8_t SizePacketMax = SizeHeader + SizeDataMax;
 
 	constexpr static const uint16_t SKM_SIGNATURE = 0x534B;
 
 	constexpr static const uint16_t FLAG_ACK_PACKET = (1 << 0);
+	constexpr static const uint16_t FLAG_DISCOVERY_PACKET = (1 << 1);
+	constexpr static const uint16_t FLAG_DISCOVERY_RESPONSE_PACKET = (1 << 2);
 
-	typedef uint32_t Address;
-	typedef uint16_t Type;
+	constexpr static const Address ADDRESS_BROADCAST = 0xFFFFFFFF;
+
+
 
 	union Header {
 		struct {
 			uint16_t signature;
 
+			Address senderAddress;
+			Address receiverAddress;
+
 			Address destinyAddress;
 			Address sourceAddress;
-			Address senderAddress;
 
 			Type type;
 			uint16_t id;
@@ -71,6 +81,9 @@ public:
 	uint8_t getTotalSize();
 
 	bool isAckPacket();
+	bool isBroadcastPacket();
+	bool isForMe(Address myAddress);
+
 
 
 	uint8_t getMaxDataSize();
@@ -98,8 +111,6 @@ public:
 	bool isAckTimeout();
 	bool canDoRetransmition();
 
-	void config(Header header);
-
 	void doTxed();
 	void doFailed();
 	void doAcked();
@@ -113,12 +124,9 @@ public:
 	void onAck(PacketCallback onAck);
 
 private:
-	LinkedList<PacketCallback> onFailList;
-	LinkedList<PacketCallback> onTxList;
-	LinkedList<PacketCallback> onAckList;
-	void runOnFail();
-	void runOnTx();
-	void runOnAck();
+	PacketCallback onFailCallback;
+	PacketCallback onTxCallback;
+	PacketCallback onAckCallback;
 
 	TxConfig txConfig;
 
@@ -139,8 +147,6 @@ public:
 	uint32_t getRxTime();
 
 	int32_t getdBm();
-
-	SKMPacketTx generateAckPacket();
 
 private:
 	uint32_t rxTime;

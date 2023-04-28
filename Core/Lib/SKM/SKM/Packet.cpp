@@ -42,6 +42,13 @@ uint8_t SKMPacket::getMaxDataSize(){
 bool SKMPacket::isAckPacket(){
 	return header.flags && FLAG_ACK_PACKET;
 }
+bool SKMPacket::isBroadcastPacket(){
+	return header.destinyAddress == ADDRESS_BROADCAST && header.destinyAddress == ADDRESS_BROADCAST;
+}
+
+bool SKMPacket::isForMe(Address myAddress){
+	return header.destinyAddress == myAddress || header.destinyAddress == ADDRESS_BROADCAST;
+}
 
 void SKMPacket::printInfo(){
 	System::logLn("-----------------------------------------------------");
@@ -89,9 +96,8 @@ void SKMPacket::printAllHex(){
 //-----------------------------------------------------------------------------------------------------------------
 
 SKMPacketTx::~SKMPacketTx(){
-	onFailList.clear();
-	onTxList.clear();
-	onAckList.clear();
+
+
 }
 
 SKMPacketTx::SKMPacketTx() :
@@ -100,6 +106,10 @@ SKMPacketTx::SKMPacketTx() :
 	retransmitionCount = 0;
 	ackTime = 0;
 	txTime = 0;
+
+	onTxCallback = nullptr;
+	onAckCallback = nullptr;
+	onFailCallback = nullptr;
 
 }
 
@@ -114,6 +124,10 @@ SKMPacketTx::SKMPacketTx(uint8_t* dataValues, size_t sizeData, TxConfig packetTx
 	this->dataSize = sizeData;
 
 	this->txConfig = packetTxConfig;
+	this->header.destinyAddress = txConfig.destinyAddress;
+	this->header.receiverAddress = txConfig.destinyAddress;
+	this->header.type = txConfig.type;
+	this->header.signature = SKM_SIGNATURE;
 }
 
 bool SKMPacketTx::isAckTimeout(){
@@ -128,26 +142,22 @@ bool SKMPacketTx::canDoRetransmition(){
 	return true;
 }
 
-void SKMPacketTx::config(Header newHeader){
-	this->header = newHeader;
-
-	this->header.destinyAddress = txConfig.destinyAddress;
-	this->header.type = txConfig.type;
-	this->header.signature = SKM_SIGNATURE;
-}
 
 void SKMPacketTx::doTxed(){
 	this->txTime = System::getTick();
-	runOnTx();
+	if(onTxCallback != nullptr)
+		onTxCallback(this);
 }
 
 void SKMPacketTx::doFailed(){
-	runOnFail();
+	if(onFailCallback != nullptr)
+		onFailCallback(this);
 
 }
 void SKMPacketTx::doAcked(){
 	ackTime = System::getTick();
-	runOnAck();
+	if(onAckCallback != nullptr)
+		onAckCallback(this);
 }
 
 uint32_t SKMPacketTx::getTxTime(){
@@ -160,27 +170,14 @@ uint32_t SKMPacketTx::getInFlightTime(){
 	return ackTime - txTime;
 }
 
-void SKMPacketTx::onFail(PacketCallback onFail){
-	onFailList.add(onFail);
+void SKMPacketTx::onFail(PacketCallback onFailCallback){
+	this->onFailCallback = onFailCallback;
 }
-void SKMPacketTx::onTx(PacketCallback onSent){
-	onTxList.add(onSent);
+void SKMPacketTx::onTx(PacketCallback onSentCallback){
+	this->onTxCallback = onSentCallback;
 }
-void SKMPacketTx::onAck(PacketCallback onAck){
-	onAckList.add(onAck);
-}
-
-void SKMPacketTx::runOnFail(){
-	for (int q = 0; q < onFailList.size(); q++)
-		onFailList[q](this);
-}
-void SKMPacketTx::runOnTx(){
-	for (int q = 0; q < onTxList.size(); q++)
-		onTxList[q](this);
-}
-void SKMPacketTx::runOnAck(){
-	for (int q = 0; q < onAckList.size(); q++)
-		onAckList[q](this);
+void SKMPacketTx::onAck(PacketCallback onAckCallback){
+	this->onAckCallback = onAckCallback;
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -211,27 +208,3 @@ bool SKMPacketRx::isValid(){
 int32_t SKMPacketRx::getdBm(){
 	return rssi/2;//(0-rssi)/2;
 }
-
-SKMPacketTx SKMPacketRx::generateAckPacket(){
-
-	SKMPacketTx::TxConfig txConfig;
-
-	txConfig.type = header.type;
-	txConfig.ackTimout = 0;
-	txConfig.retransmitionCountMax = 0;
-	txConfig.destinyAddress = header.sourceAddress;
-
-	SKMPacketTx ackPack = SKMPacketTx(nullptr, 0, txConfig);
-
-	SKMPacket::Header cfg;
-	cfg.senderAddress = header.destinyAddress;
-	cfg.sourceAddress = header.destinyAddress;
-	cfg.id = header.id;
-	cfg.flags = SKMPacket::FLAG_ACK_PACKET;
-	cfg.cryptoKey = 0;
-
-	ackPack.config(cfg);
-
-	return ackPack;
-}
-

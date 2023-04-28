@@ -121,6 +121,7 @@ LinkedList<T>::LinkedList(){
 // Clear Nodes and free Memory
 template<typename T>
 LinkedList<T>::~LinkedList(){
+	clear();
 	ListNode<T> *tmp;
 	while(root != NULL){
 		tmp = root;

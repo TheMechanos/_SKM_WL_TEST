@@ -71,6 +71,15 @@ void SKWL::init(){
 	button[1].init();
 	button[2].init();
 
+	//Init RNG
+	__HAL_RCC_RNG_CLK_ENABLE();
+	hrng.Instance = RNG;
+	hrng.Init.ClockErrorDetection = RNG_CED_DISABLE;
+	if(HAL_RNG_Init(&hrng) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+	System::registerRNG(&hrng);
+
 	//Inicjalizacja Radia
 	__HAL_RCC_SUBGHZ_CLK_ENABLE();
 
@@ -81,9 +90,21 @@ void SKWL::init(){
 
 	initUart();
 
-	//srand(System::getSKID());
+/*
+	GPIO_InitTypeDef g;
+	g.Pin = GPIO_PIN_4;
+	g.Alternate = 0;
+	g.Pull = GPIO_NOPULL;
+	g.Speed = GPIO_SPEED_FREQ_LOW;
+	g.Mode = GPIO_MODE_OUTPUT_PP;
+
+	HAL_GPIO_Init(GPIOB, &g);
+*/
+
 
 }
+
+
 
 void SKWL::initUart(){
 
@@ -133,8 +154,6 @@ void SKWL::initUart(){
 		System::SystemErrorHandler();
 	}
 
-
-
 }
 
 void SKWL::iterateCritical(){
@@ -142,7 +161,7 @@ void SKWL::iterateCritical(){
 }
 
 static char uartBuffer[128];
-static bool uartReady=true;
+static bool uartReady = true;
 
 void SKWL::iterateNonCritical(){
 	uint32_t TICK = System::getTick();
@@ -163,7 +182,7 @@ void SKWL::iterateNonCritical(){
 			uartBuffer[q] = logBuffor.front();
 			logBuffor.pop();
 		}
-		uartReady=false;
+		uartReady = false;
 		HAL_UART_Transmit_IT(&SKWL::getInstance()->hlpuart1, (uint8_t*) uartBuffer, si);
 	}
 
@@ -206,6 +225,14 @@ void SKWL::SystemClock_Config(void){
 	if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK){
 		System::SystemErrorHandler();
 	}
+
+	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = { 0 };
+	PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RNG;
+	PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_PLL;
+	if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK){
+		System::SystemErrorHandler();
+	}
+
 }
 
 //INTERRUPT SECTION ***********************************************************************************************************************
@@ -245,13 +272,12 @@ extern "C" void HAL_SUBGHZ_RxTxTimeoutCallback(SUBGHZ_HandleTypeDef* hsubghz){
 }
 
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart){
-	uartReady=true;
+	uartReady = true;
 }
 
 extern "C" void LPUART1_IRQHandler(void){
-  HAL_UART_IRQHandler(&SKWL::getInstance()->hlpuart1);
+	HAL_UART_IRQHandler(&SKWL::getInstance()->hlpuart1);
 }
-
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */

@@ -14,7 +14,7 @@
 class SKMListner{
 public:
 	virtual void onTxDone()=0;
-	virtual void onRxDone()=0;
+	virtual void onRxDone(SKMPacketRx* packet)=0;
 	virtual void onTxRxFail()=0;
 };
 
@@ -24,7 +24,6 @@ public:
 	virtual void iterate(){};
 
 	virtual bool sendPacket(SKMPacketTx* packet)=0;
-	virtual SKMPacketRx* importAvalaiblePacket()=0;
 
 	virtual void registerListner(SKMListner* listner){
 		this->listner = listner;

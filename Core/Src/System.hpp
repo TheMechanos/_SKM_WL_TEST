@@ -27,6 +27,9 @@ public:
 
 	static uint32_t getTick();
 
+	static void registerRNG(RNG_HandleTypeDef* rng);
+	static uint32_t getRandomNumber();
+
 	static void setLoopsInTenMs(uint16_t s);
 
 	static uint16_t getLoopsInTenMs();
@@ -41,6 +44,8 @@ public:
 
 private:
 	static uint16_t loopsInTenMs;
+
+	static RNG_HandleTypeDef* rng;
 
 
 

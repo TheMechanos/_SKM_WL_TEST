@@ -43,8 +43,8 @@ public:
 	void iterateCritical();
 	void iterateNonCritical();
 
-	CircularQueue<char, 2048> logBuffor;
 
+	CircularQueue<char, 2048> logBuffor;
 
 	static SKWL* getInstance();
 
@@ -54,6 +54,7 @@ public:
 
 	void initUart();
 	UART_HandleTypeDef hlpuart1;
+	RNG_HandleTypeDef hrng;
 
 	PIN pinLed[3];
 	PIN pinSw[3];

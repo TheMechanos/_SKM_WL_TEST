@@ -10,19 +10,23 @@
 SKMRadioSX126X::SKMRadioSX126X(SKM_SX126x_Interface* interface) :
 		SX126x(interface){
 
-	txTimeout = 100;
-
 	isSleep = false;
 
+	isReceiving=false;
+	receivingStartTime = 0;
+
 }
+
 
 void SKMRadioSX126X::init(){
 	SX126x::init();
 }
 
-void SKMRadioSX126X::configTxTimeout(uint16_t msTxTimeout){
-	this->txTimeout = msTxTimeout;
+
+void SKMRadioSX126X::iterate(){
+
 }
+
 
 void SKMRadioSX126X::setSleep(){
 	SleepConfig sc;
@@ -41,8 +45,7 @@ void SKMRadioSX126X::setIdle(){
 void SKMRadioSX126X::setRx(){
 	setConfigPacketSize();
 
-
-	setModeRx();
+	setModeRxCont();
 	isSleep = false;
 }
 
@@ -51,28 +54,8 @@ void SKMRadioSX126X::setModeTxContinousWave(){
 	isSleep = false;
 }
 
-/*
- SKMRadioSX126X::State SKMRadioSX126X::getState(){//Sleep, Busy, Idle, Rx, Tx
- SX126x::Status st = getStatus();
-
- if(isSleep){
- return State::Sleep;
- }
-
- if(st.mode == SX126x::Status::Mode::RX){
- return State::Rx;
- }
- if(st.mode == SX126x::Status::Mode::TX){
- return State::Tx;
- }
- if(st.mode == SX126x::Status::Mode::STDBY_RC || st.mode == SX126x::Status::Mode::STDBY_XOSC){
- return State::Idle;
- }
- return State::Idle;
- }**/
-
 bool SKMRadioSX126X::sendPacket(SKMPacketTx* packet){
-	return transmitPacket(packet, txTimeout);
+	return transmit(packet->getTotalIdx(), packet->getTotalSize(), TRANSMITING_TIMEOUT);
 }
 
 SKMPacketRx* SKMRadioSX126X::importAvalaiblePacket(){
@@ -99,30 +82,15 @@ SKMPacketRx* SKMRadioSX126X::importAvalaiblePacket(){
 	return nullptr;
 }
 
-void SKMRadioSX126X::iterate(){
-
-}
-
-bool SKMRadioSX126X::transmitPacket(SKMPacketTx* packet, uint32_t timeout){
-	return transmit(packet->getTotalIdx(), packet->getTotalSize(), timeout);
-}
-
-uint8_t SKMRadioSX126X::receivePacket(SKMPacketRx* packet, uint32_t timeout){
-	/*uint8_t data[255];
-	 uint8_t len = receive(data, packet->getPacketMaxLength(), timeout);
-
-	 packet->setTotalSize(len);
-
-	 for(uint8_t q=0;q<len;q++){
-	 packet->idx[q] = data[q];
-	 }
-	 return len - SKMPacket::SizeHeader;*/
-}
-
 bool SKMRadioSX126X::transmit(uint8_t* buffer, uint8_t size, uint32_t timeout){
+	if(isReceiving){
+		if(System::getTick() > receivingStartTime + RECEIVING_TIMEOUT)
+			isReceiving=false;
+		else
+			return false;
+	}
 
 	auto st = getStatus().mode;
-
 	if(st == Status::Mode::FS || st == Status::Mode::RX || st == Status::Mode::STDBY_RC || st == Status::Mode::STDBY_XOSC){
 
 		setModeSTDBY();
@@ -136,70 +104,45 @@ bool SKMRadioSX126X::transmit(uint8_t* buffer, uint8_t size, uint32_t timeout){
 	return false;
 }
 
-uint8_t SKMRadioSX126X::receive(uint8_t* buffer, uint8_t size, uint32_t timeout){
-
-	if(conf->packetParams.GFSK.packetLength == PacketParams::PacketLength::Const){
-		setPacketSize(size);
-	}else{
-		setConfigPacketSize();
-	}
-
-	setModeRx(timeout * 1000);
-
-	uint32_t endTick = System::getTick() + timeout;
-	while(1){
-		if(System::getTick() > endTick){
-			return 0;
-		}
-
-		Status s = getStatus();
-
-		if(s.radio == Status::Radio::DataAvailable){
-			PacketStatus packetStatus = getPacketStatus();
-
-			if(packetStatus.GFSK.Status.crcError == false){
-				break;
-			}else{
-				return 0;
-			}
-
-		}
-
-	}
-	RxBufferState rxb = getRxBufferStatus();
-
-	if(rxb.payloadLengthRx > size){
-		return 0;
-	}
-
-	readBuffer(rxb.rxStartBufferPointer, buffer, rxb.payloadLengthRx);
-
-	return rxb.payloadLengthRx;
-
-}
 
 void SKMRadioSX126X::irqTxCpltCallback(){
+	isReceiving = false;
 	listner->onTxDone();
 	setRx();
 }
 
 void SKMRadioSX126X::irqRxCpltCallback(){
-	listner->onRxDone();
+	isReceiving = false;
+
+	SKMPacketRx *packet = importAvalaiblePacket();
 	setRx();
-}
-
-void SKMRadioSX126X::irqPreambleDetectedCallback(){
-}
-
-void SKMRadioSX126X::irqSyncWordValidCallback(){
-}
-
-void SKMRadioSX126X::irqCRCErrorCallback(){
-	//listner->onTxRxFail();
-	//setRx();
+	if(packet !=nullptr){
+		listner->onRxDone(packet);
+		delete packet;
+	}
 }
 
 void SKMRadioSX126X::irqRxTxTimeoutCallback(){
+	isReceiving = false;
 	listner->onTxRxFail();
 	setRx();
 }
+
+void SKMRadioSX126X::irqSyncWordValidCallback(){
+	isReceiving = true;
+	receivingStartTime = System::getTick();
+}
+
+void SKMRadioSX126X::irqPreambleDetectedCallback(){}
+void SKMRadioSX126X::irqCRCErrorCallback(){}
+
+
+/*
+void dbgON(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
+
+}
+void dbgOFF(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
+}
+*/

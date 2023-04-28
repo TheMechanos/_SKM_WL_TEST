@@ -8,6 +8,7 @@
 #include "System.hpp"
 
 uint16_t System::loopsInTenMs;
+RNG_HandleTypeDef *System::rng;
 
 void System::SystemErrorHandler(){
 	while(1){
@@ -17,6 +18,18 @@ void System::SystemErrorHandler(){
 
 uint32_t System::getTick(){
 	return HAL_GetTick();
+}
+
+void System::registerRNG(RNG_HandleTypeDef* rng){
+	System::rng = rng;
+}
+uint32_t System::getRandomNumber(){
+	if(rng){
+		uint32_t random;
+		HAL_RNG_GenerateRandomNumber(rng, &random);
+		return random;
+	}
+	return 0;
 }
 
 void System::setLoopsInTenMs(uint16_t s){

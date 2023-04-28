@@ -11,6 +11,7 @@
 #include "SX126x.hpp"
 #include <System.hpp>
 
+
 #include <Software/CircuralContainers/CircularQueue.h>
 
 #include <SKM/Packet.hpp>
@@ -21,8 +22,6 @@ public:
 
 	SKMRadioSX126X()=default;
 	SKMRadioSX126X(SKM_SX126x_Interface* interface);
-
-	void configTxTimeout(uint16_t msTxTimeout);
 
 	virtual void init();
 	virtual void iterate();
@@ -35,8 +34,6 @@ public:
 	//virtual State getState();
 
 	virtual bool sendPacket(SKMPacketTx* packet);
-	virtual SKMPacketRx* importAvalaiblePacket();
-
 
 
 	void irqTxCpltCallback();
@@ -48,17 +45,23 @@ public:
 
 
 private:
-
-	bool transmitPacket(SKMPacketTx* packet, uint32_t timeout);
-	uint8_t receivePacket(SKMPacketRx* packet, uint32_t timeout);
+	constexpr static const uint32_t RECEIVING_TIMEOUT = 10;
+	constexpr static const uint32_t TRANSMITING_TIMEOUT = 10;
 
 	bool transmit(uint8_t* buffer, uint8_t size, uint32_t timeout);
-	uint8_t receive(uint8_t* buffer, uint8_t maxSize, uint32_t timeout);
-
-	uint16_t txTimeout;
+	SKMPacketRx* importAvalaiblePacket();
 
 	bool isSleep;
 
+
+	bool isReceiving;
+	uint32_t receivingStartTime;
+
 };
 
+
+/*
+void dbgON();
+void dbgOFF();
+*/
 #endif /* LIB_SEBIXFRAMEWORK_RADIO_MODULES_SX126X_SKMRADIOSX126X_HPP_ */
