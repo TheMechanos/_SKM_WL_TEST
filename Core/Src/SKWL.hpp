@@ -26,8 +26,8 @@
 #include <Interfaces/SubGhz/SubGhz.hpp>
 #include <Modules/SX126x/Config/SXExampleConfig.hpp>
 #include <Modules/SX126x/Interfaces/HAL_STM32WL.hpp>
-#include <Modules/SX126x/SKMRadioSX126X.hpp>
-#include <SKM/Controllers/SKMController.hpp>
+#include <Modules/SX126x/RadioSX126X.hpp>
+#include <SKP2PController.hpp>
 
 #include <Software/CircuralContainers/CircularQueue.h>
 
@@ -65,9 +65,10 @@ public:
 	OUTPUT_ADVENCED led[3];
 	BUTTON_CLICK button[3];
 
-	SKMRadioSX126X sxRadio;
-	SKMController radio;
-	SKM_SX126x_STM32WL_HAL_Interface radioInterface;
+	SKP2P::SX126x_STM32WL_HAL_Interface radioInterface;
+	SKP2P::RadioSX126X sxRadio;
+	SKP2P::Controller radio;
+
 
 
 

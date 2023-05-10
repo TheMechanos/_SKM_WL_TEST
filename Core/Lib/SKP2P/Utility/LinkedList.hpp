@@ -5,8 +5,8 @@
  *      Author: user
  */
 
-#ifndef LIB_SKM_LINKEDLIST_HPP_
-#define LIB_SKM_LINKEDLIST_HPP_
+#ifndef LIB_SKP2P_LINKEDLIST_HPP_
+#define LIB_SKP2P_LINKEDLIST_HPP_
 
 #include <stddef.h>
 
@@ -407,4 +407,4 @@ ListNode<T>* LinkedList<T>::findEndOfSortedString(ListNode<T>* p, int (*cmp)(T&,
 	return p;
 }
 
-#endif /* LIB_SKM_LINKEDLIST_HPP_ */
+#endif /* LIB_SKP2P_LINKEDLIST_HPP_ */

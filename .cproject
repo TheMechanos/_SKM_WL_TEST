@@ -69,7 +69,7 @@
 									<listOptionValue builtIn="false" value="../Core/Lib/SebixFramework"/>
 									<listOptionValue builtIn="false" value="../Core/Lib/STM32WL_SebixFramework"/>
 									<listOptionValue builtIn="false" value="../Core/Src"/>
-									<listOptionValue builtIn="false" value="../Core/Lib/SKM"/>
+									<listOptionValue builtIn="false" value="../Core/Lib/SKP2P"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti.595695569" name="Disable generation of information about every class with virtual functions (-fno-rtti)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.input.cpp.1290444655" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.input.cpp"/>
@@ -93,7 +93,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Lib/STM32WL_SebixFramework/Interfaces/UART|Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>
@@ -180,7 +180,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Lib/STM32WL_SebixFramework/Interfaces/UART|Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>

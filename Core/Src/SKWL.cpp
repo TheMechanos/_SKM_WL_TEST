@@ -40,11 +40,11 @@ SKWL::SKWL(){
 	button[1] = BUTTON_CLICK(&pinSw[1], 30);
 	button[2] = BUTTON_CLICK(&pinSw[2], 30);
 
-	radioInterface = SKM_SX126x_STM32WL_HAL_Interface(SKM_SX126x_STM32WL_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
+	radioInterface = SKP2P::SX126x_STM32WL_HAL_Interface(SKP2P::SX126x_STM32WL_HAL_Interface::BaudRatePrescaller::BR2, 1, &pinRfSwTx, &pinRfSwRx);
 
-	sxRadio = SKMRadioSX126X(&radioInterface);
+	sxRadio = SKP2P::RadioSX126X(&radioInterface);
 
-	radio = SKMController(&sxRadio, System::getSKID());
+	radio = SKP2P::Controller(&sxRadio, System::getSKID());
 
 }
 
@@ -84,7 +84,7 @@ void SKWL::init(){
 	__HAL_RCC_SUBGHZ_CLK_ENABLE();
 
 	sxRadio.init();
-	sxRadio.config(&sxExampleGFSK);
+	sxRadio.config(&SKP2P::sxExampleGFSK);
 
 	radio.init();
 

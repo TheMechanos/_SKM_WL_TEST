@@ -13,7 +13,7 @@
 #include <SKWL.hpp>
 #include <System.hpp>
 
-#include <SKM/Packet.hpp>
+#include <Packet.hpp>
 
 class App{
 public:
@@ -35,7 +35,7 @@ private:
 	void loop();
 
 
-	SKMPacket::Address friendAddress;
+	SKP2P::Packet::Address friendAddress;
 
 	uint8_t buffer[10];
 

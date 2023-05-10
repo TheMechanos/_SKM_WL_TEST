@@ -43,9 +43,7 @@ void App::init(){
 		friendAddress = 0x0ED15193;
 	}
 
-
-
-	dev->radio.onRx(1, [this](SKMPacketRx* packet){
+	dev->radio.onRx(1, [this](SKP2P::PacketRx* packet){
 		System::logLn("Odebrano pakiet, moc: %ddBm!", packet->getdBm());
 		//packet->printInfo();
 		//packet->printAllHex();
@@ -56,33 +54,30 @@ void App::init(){
 
 }
 
-//kontrola id pakietu przy dodawaniu
-
-bool txcw = false;
-
 void App::loop(){
 	dev->iterateNonCritical();
 
 	if(uint8_t q = dev->button[0].isMultiClick()){
 
 		uint8_t data[10] = { 0x11, 0x22, 0x33, 0x44 };
-		SKMPacketTx::TxConfig cfg;
+		SKP2P::PacketTx::TxConfig cfg;
 
 		cfg.destinyAddress = friendAddress;
 		cfg.type = q;
 		cfg.retransmitionCountMax = 2;
+		cfg.ackTimout = 200;
 
-		SKMPacketTx pac = SKMPacketTx(data, 10, cfg);
+		SKP2P::PacketTx pac = SKP2P::PacketTx(data, 10, cfg);
 
-		pac.onAck([](SKMPacketTx* packet){
+		pac.onAck([](SKP2P::PacketTx* packet){
 			System::logLn("OnAck!");
 			SKWL::getInstance()->led[2].timeON(250);
 		});
-		pac.onFail([](SKMPacketTx* packet){
+		pac.onFail([](SKP2P::PacketTx* packet){
 			System::logLn("OnFail!");
 			SKWL::getInstance()->led[1].timeON(50);
 		});
-		pac.onTx([](SKMPacketTx* packet){
+		pac.onTx([](SKP2P::PacketTx* packet){
 			System::logLn("OnTx!");
 		});
 
@@ -90,17 +85,5 @@ void App::loop(){
 
 		dev->led[0].timeOFF(25);
 	}
-
-/*
-	if(dev->button[1].isPressed()){
-		if(txcw){
-			dev->sxRadio.setRx();
-			dev->led[1].OFF();
-		}else{
-			dev->sxRadio.setModeTxContinousWave();
-			dev->led[1].blink(200, 200);
-		}
-		txcw = !txcw;
-	}*/
 
 }
