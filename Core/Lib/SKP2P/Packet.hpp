@@ -21,7 +21,7 @@ namespace SKP2P{
 		typedef uint32_t Address;
 		typedef uint16_t Type;
 
-		constexpr static const uint8_t SizeHeader = 20;
+		constexpr static const uint8_t SizeHeader = 16;
 		constexpr static const uint8_t SizeDataMax = 220;
 		constexpr static const uint8_t SizePacketMax = SizeHeader + SizeDataMax;
 
@@ -39,10 +39,10 @@ namespace SKP2P{
 			Address sourceAddress;
 			uint16_t signature;
 			Type type;
+			uint16_t flags;
 			uint16_t id;
-			uint8_t flags;
-			uint8_t qweryty;
 		};
+		static_assert(sizeof(Header)==SizeHeader,"Packet Header size error");
 
 
 		typedef uint8_t PacketData;
