@@ -21,18 +21,15 @@ namespace SKP2P{
 		typedef uint32_t Address;
 		typedef uint16_t Type;
 
-		constexpr static const uint8_t SizeHeader = 20;
-		constexpr static const uint8_t SizeDataMax = 220;
-		constexpr static const uint8_t SizePacketMax = SizeHeader + SizeDataMax;
+		constexpr static const Address ADDRESS_BROADCAST = 0xFFFFFFFF;
+
+		constexpr static const size_t SizeHeader = 15;
+		constexpr static const size_t SizeDataMax = 240;
+		constexpr static const size_t SizePacketMax = SizeHeader + SizeDataMax;
 
 		constexpr static const uint16_t SKM_SIGNATURE = 0x534B;
 
 		constexpr static const uint16_t FLAG_ACK_PACKET = (1 << 0);
-
-		constexpr static const Address ADDRESS_BROADCAST = 0xFFFFFFFF;
-
-
-
 
 		struct Header{
 			Address destinyAddress;
@@ -41,30 +38,24 @@ namespace SKP2P{
 			Type type;
 			uint16_t id;
 			uint8_t flags;
-			uint8_t qweryty;
 		};
-
-
-		typedef uint8_t PacketData;
-		typedef PacketData PacketDataArray[SizeDataMax];
 
 	protected:
-		union {
-			struct {
-				Header header;
-				PacketDataArray data;
-			};
-			uint8_t idx[SizePacketMax];
-		};
-		uint8_t dataSize;
+
+		Header header = {0};
+		uint8_t* data = nullptr;
+		size_t dataSize;
+
+		Header encodeHeader(uint8_t* headerData);
+
 
 	public:
 		~Packet();
-		Packet();
+		Packet(uint8_t* initialData, size_t initialDataSize);
 
-		Header getHeader();
-		PacketData* getData();
-		uint8_t* getTotalIdx();
+		virtual Header getHeader();
+
+		virtual size_t getData(uint8_t* buffer, size_t maxSize);
 
 		uint8_t getMaxDataSize();
 		uint8_t getDataSize();
@@ -74,8 +65,6 @@ namespace SKP2P{
 		bool isAckPacket();
 		bool isBroadcastPacket();
 		bool isForMe(Address myAddress);
-
-
 
 		void printInfo();
 		void printAllHex();

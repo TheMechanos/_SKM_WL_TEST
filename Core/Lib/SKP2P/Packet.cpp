@@ -10,28 +10,47 @@
 namespace SKP2P{
 
 	Packet::~Packet(){
-		memset(idx, 0x00, SizePacketMax);
-
+		if(data!=nullptr)
+			delete data;
 	}
-	Packet::Packet(){
-		memset(idx, 0x00, SizePacketMax);
+	Packet::Packet(uint8_t* initialData, size_t initialDataSize){
+
+		if(initialData != nullptr && initialDataSize <= SizePacketMax){
+			if(data!=nullptr)
+				delete data;
+
+			memcpy(data, initialData, initialDataSize);
+			dataSize = initialDataSize;
+		}else{
+			dataSize = 0;
+		}
+	}
+
+	Packet::Header Packet::encodeHeader(uint8_t* headerData){
+		Header h;
+		h.destinyAddress = (Address) headerData[0]<<24 || (Address) headerData[1]<<16||  (Address) headerData[2]<<8 || (Address) headerData[3];
 	}
 
 	Packet::Header Packet::getHeader(){
+		Header header;
+
+
 		return header;
 	}
-	Packet::PacketData* Packet::getData(){
-		return data;
-	}
-	uint8_t* Packet::getTotalIdx(){
-		return idx;
+
+	size_t Packet::getData(uint8_t* buffer, size_t maxSize){
+		if(maxSize >= dataSize - SizeHeader){
+			memcpy(buffer, data, dataSize);
+			return dataSize;
+		}
+		return 0;
 	}
 
 	uint8_t Packet::getTotalSize(){
-		return dataSize + SizeHeader;
+		return dataSize;
 	}
 	uint8_t Packet::getDataSize(){
-		return dataSize;
+		return dataSize - SizeHeader;
 	}
 	uint8_t Packet::getHeaderSize(){
 		return SizeHeader;
@@ -42,7 +61,7 @@ namespace SKP2P{
 	}
 
 	bool Packet::isAckPacket(){
-		return header.flags && FLAG_ACK_PACKET;
+		return getHeader().flags && FLAG_ACK_PACKET;
 	}
 	bool Packet::isBroadcastPacket(){
 		return header.destinyAddress == ADDRESS_BROADCAST && header.destinyAddress == ADDRESS_BROADCAST;
