@@ -66,9 +66,9 @@
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Core/Src/HAL"/>
-									<listOptionValue builtIn="false" value="../Core/Lib/SebixFramework"/>
-									<listOptionValue builtIn="false" value="../Core/Lib/STM32WL_SebixFramework"/>
 									<listOptionValue builtIn="false" value="../Core/Src"/>
+									<listOptionValue builtIn="false" value="../Core/Lib/SKF"/>
+									<listOptionValue builtIn="false" value="../Core/Lib/STM32WL_SKF"/>
 									<listOptionValue builtIn="false" value="../Core/Lib/SKP2P"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti.595695569" name="Disable generation of information about every class with virtual functions (-fno-rtti)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nortti" useByScannerDiscovery="false" value="false" valueType="boolean"/>
@@ -93,7 +93,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="Lib/STM32WL_SKF/Interfaces/UART|Lib/STM32WL_SKF/Interfaces/SPI|Lib/STM32WL_SKF/Interfaces/I2C|Lib/SKF/Radio|Lib/SKF/Parameters|Lib/SKF/IC|Lib/SKF/Graphics|Lib/SKF/Encoder|Lib/SKF/Displays|Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>
@@ -180,7 +180,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="Lib/STM32WL_SKF/Interfaces/UART|Lib/STM32WL_SKF/Interfaces/SPI|Lib/STM32WL_SKF/Interfaces/I2C|Lib/SKF/Radio|Lib/SKF/Parameters|Lib/SKF/IC|Lib/SKF/Graphics|Lib/SKF/Encoder|Lib/SKF/Displays|Lib/SebixFramework/IC/ShiftRegister|Lib/SebixFramework/IC/Sensors|Lib/STM32WL_SebixFramework/Interfaces/UART" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>

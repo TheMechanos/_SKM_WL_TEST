@@ -8,7 +8,8 @@
 #ifndef SKM_HAL_STM32_HPP_
 #define SKM_HAL_STM32_HPP_
 
-#include <Modules/SX126x/Interfaces/SX126x_Interface.hpp>
+
+#include "SX126x_Interface.hpp"
 
 #define SF_SUBGHZ_CRITICAL_START() uint32_t primask_bit= __get_PRIMASK();__disable_irq()
 #define SF_SUBGHZ_CRITICAL_END() __set_PRIMASK(primask_bit)

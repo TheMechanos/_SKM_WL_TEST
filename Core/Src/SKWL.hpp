@@ -11,25 +11,22 @@
 
 #include <stm32wlxx.h>
 
-#include <BasicTypes/Key/Button.hpp>
-#include <BasicTypes/Key/ButtonClick.hpp>
+#include <System.hpp>
 
 #include <BasicTypes/IO/Input.hpp>
 #include <BasicTypes/IO/Output.hpp>
-
-
-#include <Peripheral/GPIO/PIN.hpp>
-#include <Peripheral/GPIO/IO_Pin.hpp>
-
-#include <System.hpp>
-
+#include <BasicTypes/Key/Button.hpp>
+#include <BasicTypes/Key/ButtonClick.hpp>
+#include <Software/CircuralContainers/CircularQueue.h>
 #include <Interfaces/SubGhz/SubGhz.hpp>
+#include <Peripheral/GPIO/IO_Pin.hpp>
+#include <Peripheral/GPIO/PIN.hpp>
+
 #include <Modules/SX126x/Config/SXExampleConfig.hpp>
 #include <Modules/SX126x/Interfaces/HAL_STM32WL.hpp>
 #include <Modules/SX126x/RadioSX126X.hpp>
 #include <SKP2PController.hpp>
 
-#include <Software/CircuralContainers/CircularQueue.h>
 
 
 

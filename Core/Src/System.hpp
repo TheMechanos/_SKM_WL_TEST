@@ -9,10 +9,9 @@
 #define SYSTEM_HPP_
 
 #include <stm32wlxx.h>
-#include <Software/ETL/crc32.h>
-
 #include <stdarg.h>
 #include <stdio.h>
+#include <Software/ETL/crc32.h>
 
 #define SKM_PACKET_STATUS_QUEUE_SIZE 	10
 #define SKM_PACKET_TX_QUEUE_SIZE 		20
